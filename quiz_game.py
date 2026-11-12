@@ -90,9 +90,10 @@ class QuizGame:
             print("⚠️ 등록된 퀴즈가 없습니다. 먼저 퀴즈를 추가하세요.")
             return
 
-        selected = self.quizzes[:]   # 원본 순서가 바뀌지 않도록 복사본을 만든다
-        random.shuffle(selected)     # 문제 순서를 무작위로 섞는다
-        total = len(selected)
+        available = len(self.quizzes)
+        total = self.get_number(f"몇 문제를 풀까요? (1-{available}): ", 1, available)
+        # random.sample: 원본은 그대로 두고, total개를 무작위 순서로 뽑는다
+        selected = random.sample(self.quizzes, total)
         correct = 0
         print(f"\n📝 퀴즈를 시작합니다! (총 {total}문제)")
 
