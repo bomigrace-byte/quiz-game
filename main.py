@@ -1,5 +1,50 @@
+class Quiz:
+    """퀴즈 한 문제를 표현하는 클래스"""
+
+    def __init__(self, question, choices, answer):
+        self.question = question  # 문제 (str)
+        self.choices = choices    # 선택지 4개 (list)
+        self.answer = answer      # 정답 번호 1~4 (int)
+
+    def display(self, number):
+        """문제와 선택지를 화면에 출력한다."""
+        print(f"\n[문제 {number}]")
+        print(self.question)
+        print()
+        for i, choice in enumerate(self.choices, start=1):
+            print(f"  {i}. {choice}")
+        print()
+
+    def is_correct(self, user_answer):
+        """사용자가 고른 번호가 정답이면 True를 반환한다."""
+        return user_answer == self.answer
+
+
+def get_default_quizzes():
+    """기본 퀴즈 목록을 Quiz 인스턴스로 만들어 반환한다."""
+    return [
+        Quiz("Python에서 정수(숫자)를 나타내는 자료형은?",
+             ["str", "int", "bool", "list"], 2),
+        Quiz("Python에서 '키:값' 쌍으로 데이터를 저장하는 자료형은?",
+             ["list", "tuple", "dict", "str"], 3),
+        Quiz("반복 횟수가 정해져 있지 않고, 조건이 참인 동안 계속 반복할 때 주로 쓰는 문법은?",
+             ["for", "if", "def", "while"], 4),
+        Quiz("클래스에서 객체가 생성될 때 자동으로 실행되는 메서드는?",
+             ["__init__", "__str__", "__main__", "__call__"], 1),
+        Quiz("원격 저장소(GitHub)를 내 컴퓨터로 통째로 복제하는 Git 명령어는?",
+             ["git pull", "git push", "git clone", "git init"], 3),
+        Quiz("새 브랜치를 만들면서 바로 그 브랜치로 이동하는 명령어는?",
+             ["git branch -d", "git checkout -b", "git merge", "git add -A"], 2),
+        Quiz("원격 저장소의 최신 변경사항을 내 로컬 저장소로 가져와 합치는 명령어는?",
+             ["git pull", "git commit", "git log", "git status"], 1),
+    ]
+
+
 class QuizGame:
     """퀴즈 게임 전체를 관리하는 클래스"""
+
+    def __init__(self):
+        self.quizzes = get_default_quizzes()  # Quiz 객체들의 리스트
 
     # ---------- 입력 처리 ----------
     def read_input(self, prompt):
