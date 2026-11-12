@@ -60,6 +60,7 @@ class QuizGame:
 
     def __init__(self):
         self.quizzes = get_default_quizzes()  # Quiz 객체들의 리스트
+        self.best_score = None                # 최고 점수 (아직 안 풀었으면 None)
 
     # ---------- 입력 처리 ----------
     def read_input(self, prompt):
@@ -120,7 +121,11 @@ class QuizGame:
         print()
         print("=" * 40)
         print(f"🏆 결과: {total}문제 중 {correct}문제 정답! ({score}점)")
+        if self.best_score is None or score > self.best_score:
+            self.best_score = score
+            print("🎉 새로운 최고 점수입니다!")
         print("=" * 40)
+        self.save()
 
     # ---------- 퀴즈 추가 ----------
     def add_quiz(self):
@@ -149,11 +154,20 @@ class QuizGame:
             print(f"[{i}] {quiz.question}")
         print("-" * 40)
 
+    # ---------- 점수 확인 ----------
+    def show_score(self):
+        """최고 점수를 보여준다."""
+        if self.best_score is None:
+            print("\n📭 아직 퀴즈를 풀지 않았습니다. 먼저 퀴즈를 풀어 보세요!")
+            return
+        print(f"\n🏆 최고 점수: {self.best_score}점")
+
     # ---------- 파일 저장 ----------
     def save(self):
-        """현재 퀴즈 목록을 state.json에 저장한다."""
+        """현재 퀴즈 목록과 최고 점수를 state.json에 저장한다."""
         data = {
             "quizzes": [quiz.to_dict() for quiz in self.quizzes],
+            "best_score": self.best_score,
         }
         with open(STATE_FILE, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
@@ -185,7 +199,7 @@ class QuizGame:
             elif choice == 3:
                 self.list_quizzes()
             elif choice == 4:
-                print("🚧 점수 확인 기능은 준비 중입니다.")
+                self.show_score()
             else:
                 print("👋 프로그램을 종료합니다.")
                 break
