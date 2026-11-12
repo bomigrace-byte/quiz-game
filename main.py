@@ -1,3 +1,10 @@
+import json
+import os
+
+# 데이터 파일은 항상 이 파일과 같은 폴더(프로젝트 루트)에 저장한다.
+STATE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "state.json")
+
+
 class Quiz:
     """퀴즈 한 문제를 표현하는 클래스"""
 
@@ -18,6 +25,14 @@ class Quiz:
     def is_correct(self, user_answer):
         """사용자가 고른 번호가 정답이면 True를 반환한다."""
         return user_answer == self.answer
+
+    def to_dict(self):
+        """JSON으로 저장할 수 있도록 딕셔너리로 변환한다."""
+        return {
+            "question": self.question,
+            "choices": self.choices,
+            "answer": self.answer,
+        }
 
 
 def get_default_quizzes():
@@ -72,6 +87,14 @@ class QuizGame:
 
             return number
 
+    def get_text(self, prompt):
+        """빈 값이 아닌 문자열을 입력받을 때까지 반복한다."""
+        while True:
+            text = self.read_input(prompt)
+            if text:
+                return text
+            print("⚠️ 빈 값은 입력할 수 없습니다. 다시 입력하세요.")
+
     # ---------- 퀴즈 풀기 ----------
     def play(self):
         """저장된 퀴즈를 순서대로 출제하고 결과를 보여준다."""
@@ -99,6 +122,29 @@ class QuizGame:
         print(f"🏆 결과: {total}문제 중 {correct}문제 정답! ({score}점)")
         print("=" * 40)
 
+    # ---------- 퀴즈 추가 ----------
+    def add_quiz(self):
+        """새 퀴즈를 입력받아 목록에 추가하고 파일에 저장한다."""
+        print("\n📌 새로운 퀴즈를 추가합니다.\n")
+        question = self.get_text("문제를 입력하세요: ")
+        choices = []
+        for i in range(1, 5):
+            choices.append(self.get_text(f"선택지 {i}: "))
+        answer = self.get_number("정답 번호 (1-4): ", 1, 4)
+
+        self.quizzes.append(Quiz(question, choices, answer))
+        self.save()
+        print("\n✅ 퀴즈가 추가되었습니다!")
+
+    # ---------- 파일 저장 ----------
+    def save(self):
+        """현재 퀴즈 목록을 state.json에 저장한다."""
+        data = {
+            "quizzes": [quiz.to_dict() for quiz in self.quizzes],
+        }
+        with open(STATE_FILE, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+
     # ---------- 메뉴 ----------
     def show_menu(self):
         """메인 메뉴를 출력한다."""
@@ -122,7 +168,7 @@ class QuizGame:
             if choice == 1:
                 self.play()
             elif choice == 2:
-                print("🚧 퀴즈 추가 기능은 준비 중입니다.")
+                self.add_quiz()
             elif choice == 3:
                 print("🚧 퀴즈 목록 기능은 준비 중입니다.")
             elif choice == 4:
