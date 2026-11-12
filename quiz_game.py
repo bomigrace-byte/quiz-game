@@ -1,5 +1,6 @@
 import json
 import os
+import random
 
 from quiz import Quiz
 from quiz_data import get_default_quizzes
@@ -89,7 +90,8 @@ class QuizGame:
             print("⚠️ 등록된 퀴즈가 없습니다. 먼저 퀴즈를 추가하세요.")
             return
 
-        selected = self.quizzes
+        selected = self.quizzes[:]   # 원본 순서가 바뀌지 않도록 복사본을 만든다
+        random.shuffle(selected)     # 문제 순서를 무작위로 섞는다
         total = len(selected)
         correct = 0
         print(f"\n📝 퀴즈를 시작합니다! (총 {total}문제)")
