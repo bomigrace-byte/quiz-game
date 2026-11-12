@@ -136,8 +136,28 @@ quiz-game/
 |---|---|
 | ![메뉴](docs/screenshots/menu.png) | ![플레이](docs/screenshots/play.png) |
 
-| 퀴즈 추가 | 점수 확인 |
+### 퀴즈 추가
+
+| 추가 1 | 추가 2 | 추가 3 |
+|---|---|---|
+| ![퀴즈 추가 1](docs/screenshots/add_quiz_01.png) | ![퀴즈 추가 2](docs/screenshots/add_quiz_02.png) | ![퀴즈 추가 3](docs/screenshots/add_quiz_03.png) |
+
+| 퀴즈 목록 | 점수 확인 |
 |---|---|
-| ![퀴즈 추가](docs/screenshots/add_quiz.png) | ![점수](docs/screenshots/score.png) |
+| ![목록](docs/screenshots/quiz_list.png) | ![점수](docs/screenshots/score.png) |
+
+| 잘못된 입력 처리 |
+|---|
+| ![입력 오류](docs/screenshots/type_error.png) |
+
+### 개발 환경
+
+![개발 환경](docs/screenshots/dev_env.png)
+
+### Git 기록
+
+| git log --oneline --graph | 커밋 수 |
+|---|---|
+| ![git log](docs/screenshots/git_log_graph.png) | ![커밋 수](docs/screenshots/commit_count.png) |
 
 > 이 줄은 clone한 저장소에서 추가한 뒤 push했습니다. (clone/pull 실습)
