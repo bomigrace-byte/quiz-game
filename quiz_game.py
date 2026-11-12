@@ -12,7 +12,7 @@ STATE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "state.jso
 class QuizGame:
     """퀴즈 게임 전체(메뉴, 진행, 저장)를 관리하는 클래스"""
 
-    MENU_ITEMS = ["퀴즈 풀기", "퀴즈 추가", "퀴즈 목록", "점수 확인", "종료"]
+    MENU_ITEMS = ["퀴즈 풀기", "퀴즈 추가", "퀴즈 목록", "점수 확인", "퀴즈 삭제", "종료"]
 
     def __init__(self):
         self.quizzes = []        # Quiz 객체들의 리스트
@@ -34,6 +34,8 @@ class QuizGame:
                 self.list_quizzes()
             elif choice == 4:
                 self.show_score()
+            elif choice == 5:
+                self.delete_quiz()
             else:
                 self.save()
                 print("👋 프로그램을 종료합니다.")
@@ -82,6 +84,16 @@ class QuizGame:
             if text:
                 return text
             print("⚠️ 빈 값은 입력할 수 없습니다. 다시 입력하세요.")
+
+    def ask_yes_no(self, prompt):
+        """y 또는 n을 입력받아 y이면 True를 반환한다."""
+        while True:
+            text = self.read_input(prompt).lower()
+            if text == "y":
+                return True
+            if text == "n":
+                return False
+            print("⚠️ y 또는 n을 입력하세요.")
 
     def get_answer(self, quiz):
         """정답 번호(1~4)를 입력받는다. 'h'를 입력하면 힌트를 보여준다.
@@ -199,6 +211,27 @@ class QuizGame:
             hint_mark = " 💡" if quiz.has_hint() else ""
             print(f"[{i}] {quiz.question}{hint_mark}")
         print("-" * 40)
+
+    def delete_quiz(self):
+        """번호를 골라 퀴즈를 삭제하고 파일에 반영한다."""
+        if not self.quizzes:
+            print("⚠️ 삭제할 퀴즈가 없습니다.")
+            return
+
+        self.list_quizzes()
+        total = len(self.quizzes)
+        number = self.get_number(f"삭제할 퀴즈 번호 (1-{total}, 취소는 0): ", 0, total)
+        if number == 0:
+            print("↩️ 삭제를 취소했습니다.")
+            return
+
+        target = self.quizzes[number - 1]  # 화면 번호는 1부터, 리스트 인덱스는 0부터
+        if self.ask_yes_no(f"'{target.question}' 퀴즈를 삭제할까요? (y/n): "):
+            self.quizzes.pop(number - 1)
+            self.save()
+            print("🗑️ 퀴즈가 삭제되었습니다.")
+        else:
+            print("↩️ 삭제를 취소했습니다.")
 
     # ========== 점수 확인 ==========
     def show_score(self):
