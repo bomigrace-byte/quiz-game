@@ -1,3 +1,6 @@
+import ui
+
+
 class Quiz:
     """퀴즈 한 문제를 표현하는 클래스"""
 
@@ -9,8 +12,8 @@ class Quiz:
 
     def display(self, number):
         """문제와 선택지를 화면에 출력한다."""
-        print(f"\n[문제 {number}]")
-        print(self.question)
+        print(ui.color(f"\n[문제 {number}]", ui.BOLD, ui.CYAN))
+        print(ui.color(self.question, ui.BOLD))
         print()
         for i, choice in enumerate(self.choices, start=1):
             print(f"  {i}. {choice}")

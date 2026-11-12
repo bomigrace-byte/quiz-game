@@ -3,6 +3,7 @@ import os
 import random
 from datetime import datetime
 
+import ui
 from quiz import Quiz
 from quiz_data import get_default_quizzes
 
@@ -47,12 +48,11 @@ class QuizGame:
     def show_menu(self):
         """메인 메뉴를 출력한다."""
         print()
-        print("=" * 40)
-        print("    🎯 Python & Git 기초 상식 퀴즈 🎯")
-        print("=" * 40)
+        ui.title("🎯 Python & Git 기초 상식 퀴즈 🎯")
         for i, name in enumerate(self.MENU_ITEMS, start=1):
-            print(f"{i}. {name}")
-        print("=" * 40)
+            number = ui.color(str(i), ui.BOLD, ui.YELLOW)
+            print(f"  {number}. {name}")
+        ui.line("═")
 
     # ========== 입력 처리 ==========
     def read_input(self, prompt):
@@ -65,17 +65,17 @@ class QuizGame:
             text = self.read_input(prompt)
 
             if text == "":
-                print(f"⚠️ 입력이 비어 있습니다. {min_value}-{max_value} 사이의 숫자를 입력하세요.")
+                ui.warn(f"입력이 비어 있습니다. {min_value}-{max_value} 사이의 숫자를 입력하세요.")
                 continue
 
             try:
                 number = int(text)
             except ValueError:
-                print(f"⚠️ 잘못된 입력입니다. {min_value}-{max_value} 사이의 숫자를 입력하세요.")
+                ui.warn(f"잘못된 입력입니다. {min_value}-{max_value} 사이의 숫자를 입력하세요.")
                 continue
 
             if not min_value <= number <= max_value:
-                print(f"⚠️ 잘못된 입력입니다. {min_value}-{max_value} 사이의 숫자를 입력하세요.")
+                ui.warn(f"잘못된 입력입니다. {min_value}-{max_value} 사이의 숫자를 입력하세요.")
                 continue
 
             return number
@@ -86,7 +86,7 @@ class QuizGame:
             text = self.read_input(prompt)
             if text:
                 return text
-            print("⚠️ 빈 값은 입력할 수 없습니다. 다시 입력하세요.")
+            ui.warn("빈 값은 입력할 수 없습니다. 다시 입력하세요.")
 
     def ask_yes_no(self, prompt):
         """y 또는 n을 입력받아 y이면 True를 반환한다."""
@@ -96,7 +96,7 @@ class QuizGame:
                 return True
             if text == "n":
                 return False
-            print("⚠️ y 또는 n을 입력하세요.")
+            ui.warn("y 또는 n을 입력하세요.")
 
     def get_answer(self, quiz):
         """정답 번호(1~4)를 입력받는다. 'h'를 입력하면 힌트를 보여준다.
@@ -109,26 +109,26 @@ class QuizGame:
                 text = self.read_input("정답 입력 (1-4): ").lower()
 
             if text == "":
-                print("⚠️ 입력이 비어 있습니다. 1-4 사이의 숫자를 입력하세요.")
+                ui.warn("입력이 비어 있습니다. 1-4 사이의 숫자를 입력하세요.")
                 continue
 
             if text == "h" and quiz.has_hint():
                 if used_hint:
-                    print("💡 이미 힌트를 확인했습니다.")
+                    ui.info("이미 힌트를 확인했습니다.")
                 else:
                     used_hint = True
-                    print(f"💡 힌트: {quiz.hint}")
-                    print("   (힌트를 본 문제는 맞혀도 절반 점수만 받습니다)")
+                    ui.info(f"힌트: {quiz.hint}")
+                    print(ui.color("   (힌트를 본 문제는 맞혀도 절반 점수만 받습니다)", ui.DIM))
                 continue
 
             try:
                 number = int(text)
             except ValueError:
-                print("⚠️ 잘못된 입력입니다. 1-4 사이의 숫자를 입력하세요.")
+                ui.warn("잘못된 입력입니다. 1-4 사이의 숫자를 입력하세요.")
                 continue
 
             if not 1 <= number <= 4:
-                print("⚠️ 잘못된 입력입니다. 1-4 사이의 숫자를 입력하세요.")
+                ui.warn("잘못된 입력입니다. 1-4 사이의 숫자를 입력하세요.")
                 continue
 
             return number, used_hint
@@ -137,7 +137,7 @@ class QuizGame:
     def play(self):
         """저장된 퀴즈를 출제하고 결과를 기록한다."""
         if not self.quizzes:
-            print("⚠️ 등록된 퀴즈가 없습니다. 먼저 퀴즈를 추가하세요.")
+            ui.warn("등록된 퀴즈가 없습니다. 먼저 퀴즈를 추가하세요.")
             return
 
         available = len(self.quizzes)
@@ -151,7 +151,8 @@ class QuizGame:
         print(f"\n📝 퀴즈를 시작합니다! (총 {total}문제)")
 
         for i, quiz in enumerate(selected, start=1):
-            print("-" * 40)
+            ui.line()
+            ui.progress(i, total)
             quiz.display(i)
             answer, used_hint = self.get_answer(quiz)
             if used_hint:
@@ -163,9 +164,9 @@ class QuizGame:
                     earned += per_question / 2   # 힌트 사용 시 절반 점수
                 else:
                     earned += per_question
-                print("✅ 정답입니다!")
+                ui.success("정답입니다!")
             else:
-                print(f"❌ 오답입니다. 정답은 {quiz.answer}번입니다.")
+                ui.error(f"오답입니다. 정답은 {quiz.answer}번입니다.")
 
         score = round(earned)
         self.show_result(total, correct, hints_used, score)
@@ -176,11 +177,10 @@ class QuizGame:
     def show_result(self, total, correct, hints_used, score):
         """한 판의 결과를 출력한다."""
         print()
-        print("=" * 40)
-        print(f"🏆 결과: {total}문제 중 {correct}문제 정답! ({score}점)")
+        ui.title(f"🏆 결과: {total}문제 중 {correct}문제 정답! ({score}점)")
         if hints_used > 0:
-            print(f"💡 힌트 사용: {hints_used}회 (힌트 사용 문제는 절반 점수)")
-        print("=" * 40)
+            ui.info(f"힌트 사용: {hints_used}회 (힌트 사용 문제는 절반 점수)")
+        print(ui.score_message(score))
 
     def add_history(self, total, correct, hints_used, score):
         """이번 게임 기록을 히스토리에 추가한다."""
@@ -197,7 +197,7 @@ class QuizGame:
         """최고 점수와 비교해서 더 높으면 갱신한다."""
         if self.best_score is None or score > self.best_score:
             self.best_score = score
-            print("🎉 새로운 최고 점수입니다!")
+            print(ui.color("🎉 새로운 최고 점수입니다!", ui.BOLD, ui.GREEN))
 
     # ========== 퀴즈 추가 / 목록 ==========
     def add_quiz(self):
@@ -212,25 +212,26 @@ class QuizGame:
 
         self.quizzes.append(Quiz(question, choices, answer, hint))
         self.save()
-        print("\n✅ 퀴즈가 추가되었습니다!")
+        print()
+        ui.success("퀴즈가 추가되었습니다!")
 
     def list_quizzes(self):
         """등록된 퀴즈의 문제를 번호와 함께 보여준다."""
         if not self.quizzes:
-            print("⚠️ 등록된 퀴즈가 없습니다.")
+            ui.warn("등록된 퀴즈가 없습니다.")
             return
 
         print(f"\n📋 등록된 퀴즈 목록 (총 {len(self.quizzes)}개)\n")
-        print("-" * 40)
+        ui.line()
         for i, quiz in enumerate(self.quizzes, start=1):
             hint_mark = " 💡" if quiz.has_hint() else ""
             print(f"[{i}] {quiz.question}{hint_mark}")
-        print("-" * 40)
+        ui.line()
 
     def delete_quiz(self):
         """번호를 골라 퀴즈를 삭제하고 파일에 반영한다."""
         if not self.quizzes:
-            print("⚠️ 삭제할 퀴즈가 없습니다.")
+            ui.warn("삭제할 퀴즈가 없습니다.")
             return
 
         self.list_quizzes()
@@ -244,7 +245,7 @@ class QuizGame:
         if self.ask_yes_no(f"'{target.question}' 퀴즈를 삭제할까요? (y/n): "):
             self.quizzes.pop(number - 1)
             self.save()
-            print("🗑️ 퀴즈가 삭제되었습니다.")
+            ui.success("퀴즈가 삭제되었습니다.")
         else:
             print("↩️ 삭제를 취소했습니다.")
 
@@ -254,19 +255,20 @@ class QuizGame:
         if self.best_score is None:
             print("\n📭 아직 퀴즈를 풀지 않았습니다. 먼저 퀴즈를 풀어 보세요!")
             return
-        print(f"\n🏆 최고 점수: {self.best_score}점")
+        print()
+        print(ui.color(f"🏆 최고 점수: {self.best_score}점", ui.BOLD, ui.YELLOW))
 
         if not self.history:
             return
         recent = self.history[-self.RECENT_HISTORY_COUNT:]
         print(f"\n📜 최근 게임 기록 (총 {len(self.history)}회 중 최근 {len(recent)}회)")
-        print("-" * 40)
+        ui.line()
         for record in reversed(recent):  # 최신 기록부터 출력
             print(f"{record.get('date', '-')} | "
                   f"{record.get('correct', 0)}/{record.get('total', 0)} 정답 | "
                   f"힌트 {record.get('hints_used', 0)}회 | "
                   f"{record.get('score', 0)}점")
-        print("-" * 40)
+        ui.line()
 
     # ========== 파일 저장 / 불러오기 ==========
     def reset_to_default(self):
@@ -303,13 +305,13 @@ class QuizGame:
 
         except (json.JSONDecodeError, KeyError, TypeError, AttributeError, ValueError):
             # 파일 내용이 깨졌거나 형식이 맞지 않음
-            print("⚠️ 데이터 파일이 손상되어 기본 퀴즈 데이터로 복구합니다.")
+            ui.warn("데이터 파일이 손상되어 기본 퀴즈 데이터로 복구합니다.")
             self.reset_to_default()
             self.save()
 
         except OSError:
             # 권한 문제 등으로 파일을 읽을 수 없음
-            print("⚠️ 데이터 파일을 읽을 수 없어 기본 퀴즈 데이터로 시작합니다.")
+            ui.warn("데이터 파일을 읽을 수 없어 기본 퀴즈 데이터로 시작합니다.")
             self.reset_to_default()
 
     def save(self):
@@ -323,4 +325,4 @@ class QuizGame:
             with open(STATE_FILE, "w", encoding="utf-8") as f:
                 json.dump(data, f, ensure_ascii=False, indent=2)
         except OSError:
-            print("⚠️ 데이터를 저장하지 못했습니다. (파일 쓰기 오류)")
+            ui.warn("데이터를 저장하지 못했습니다. (파일 쓰기 오류)")
