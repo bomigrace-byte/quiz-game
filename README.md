@@ -139,3 +139,5 @@ quiz-game/
 | 퀴즈 추가 | 점수 확인 |
 |---|---|
 | ![퀴즈 추가](docs/screenshots/add_quiz.png) | ![점수](docs/screenshots/score.png) |
+
+> 이 줄은 clone한 저장소에서 추가한 뒤 push했습니다. (clone/pull 실습)
