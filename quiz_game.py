@@ -14,8 +14,9 @@ class QuizGame:
     MENU_ITEMS = ["퀴즈 풀기", "퀴즈 추가", "퀴즈 목록", "점수 확인", "종료"]
 
     def __init__(self):
-        self.quizzes = get_default_quizzes()  # Quiz 객체들의 리스트
-        self.best_score = None                # 최고 점수 (아직 안 풀었으면 None)
+        self.quizzes = []        # Quiz 객체들의 리스트
+        self.best_score = None   # 최고 점수 (아직 안 풀었으면 None)
+        self.load()              # 저장된 데이터가 있으면 불러온다
 
     # ========== 실행 / 메뉴 ==========
     def run(self):
@@ -155,12 +156,53 @@ class QuizGame:
             return
         print(f"\n🏆 최고 점수: {self.best_score}점")
 
-    # ========== 파일 저장 ==========
+    # ========== 파일 저장 / 불러오기 ==========
+    def reset_to_default(self):
+        """기본 퀴즈 데이터로 초기화한다."""
+        self.quizzes = get_default_quizzes()
+        self.best_score = None
+
+    def load(self):
+        """state.json에서 데이터를 불러온다.
+        파일이 없거나 손상되었으면 기본 퀴즈 데이터를 사용한다."""
+        try:
+            with open(STATE_FILE, "r", encoding="utf-8") as f:
+                data = json.load(f)
+
+            quizzes = [Quiz.from_dict(item) for item in data["quizzes"]]
+            best_score = data.get("best_score")
+            if best_score is not None and not isinstance(best_score, int):
+                raise ValueError("best_score 형식이 잘못되었습니다.")
+
+            self.quizzes = quizzes
+            self.best_score = best_score
+            best_text = "기록 없음" if best_score is None else f"{best_score}점"
+            print(f"📂 저장된 데이터를 불러왔습니다. (퀴즈 {len(quizzes)}개, 최고점수 {best_text})")
+
+        except FileNotFoundError:
+            # 첫 실행: 아직 파일이 없음
+            self.reset_to_default()
+            print("📂 저장된 데이터가 없어 기본 퀴즈로 시작합니다.")
+
+        except (json.JSONDecodeError, KeyError, TypeError, AttributeError, ValueError):
+            # 파일 내용이 깨졌거나 형식이 맞지 않음
+            print("⚠️ 데이터 파일이 손상되어 기본 퀴즈 데이터로 복구합니다.")
+            self.reset_to_default()
+            self.save()
+
+        except OSError:
+            # 권한 문제 등으로 파일을 읽을 수 없음
+            print("⚠️ 데이터 파일을 읽을 수 없어 기본 퀴즈 데이터로 시작합니다.")
+            self.reset_to_default()
+
     def save(self):
         """현재 퀴즈 목록과 최고 점수를 state.json에 저장한다."""
         data = {
             "quizzes": [quiz.to_dict() for quiz in self.quizzes],
             "best_score": self.best_score,
         }
-        with open(STATE_FILE, "w", encoding="utf-8") as f:
-            json.dump(data, f, ensure_ascii=False, indent=2)
+        try:
+            with open(STATE_FILE, "w", encoding="utf-8") as f:
+                json.dump(data, f, ensure_ascii=False, indent=2)
+        except OSError:
+            print("⚠️ 데이터를 저장하지 못했습니다. (파일 쓰기 오류)")

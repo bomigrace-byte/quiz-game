@@ -26,3 +26,20 @@ class Quiz:
             "choices": self.choices,
             "answer": self.answer,
         }
+
+    @classmethod
+    def from_dict(cls, data):
+        """state.json에서 읽은 딕셔너리로 Quiz 객체를 만든다.
+        형식이 잘못되었으면 ValueError를 발생시킨다."""
+        question = data["question"]
+        choices = data["choices"]
+        answer = data["answer"]
+
+        if not isinstance(question, str) or not question.strip():
+            raise ValueError("문제가 비어 있습니다.")
+        if not isinstance(choices, list) or len(choices) != 4:
+            raise ValueError("선택지는 4개여야 합니다.")
+        if not isinstance(answer, int) or not 1 <= answer <= 4:
+            raise ValueError("정답은 1~4 사이의 번호여야 합니다.")
+
+        return cls(question, choices, answer)
