@@ -136,6 +136,19 @@ class QuizGame:
         self.save()
         print("\n✅ 퀴즈가 추가되었습니다!")
 
+    # ---------- 퀴즈 목록 ----------
+    def list_quizzes(self):
+        """등록된 퀴즈의 문제를 번호와 함께 보여준다."""
+        if not self.quizzes:
+            print("⚠️ 등록된 퀴즈가 없습니다.")
+            return
+
+        print(f"\n📋 등록된 퀴즈 목록 (총 {len(self.quizzes)}개)\n")
+        print("-" * 40)
+        for i, quiz in enumerate(self.quizzes, start=1):
+            print(f"[{i}] {quiz.question}")
+        print("-" * 40)
+
     # ---------- 파일 저장 ----------
     def save(self):
         """현재 퀴즈 목록을 state.json에 저장한다."""
@@ -170,7 +183,7 @@ class QuizGame:
             elif choice == 2:
                 self.add_quiz()
             elif choice == 3:
-                print("🚧 퀴즈 목록 기능은 준비 중입니다.")
+                self.list_quizzes()
             elif choice == 4:
                 print("🚧 점수 확인 기능은 준비 중입니다.")
             else:
