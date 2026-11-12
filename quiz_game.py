@@ -1,6 +1,7 @@
 import json
 import os
 import random
+from datetime import datetime
 
 from quiz import Quiz
 from quiz_data import get_default_quizzes
@@ -13,10 +14,12 @@ class QuizGame:
     """퀴즈 게임 전체(메뉴, 진행, 저장)를 관리하는 클래스"""
 
     MENU_ITEMS = ["퀴즈 풀기", "퀴즈 추가", "퀴즈 목록", "점수 확인", "퀴즈 삭제", "종료"]
+    RECENT_HISTORY_COUNT = 5  # 점수 확인 화면에 보여줄 최근 기록 개수
 
     def __init__(self):
         self.quizzes = []        # Quiz 객체들의 리스트
         self.best_score = None   # 최고 점수 (아직 안 풀었으면 None)
+        self.history = []        # 게임 기록 리스트 (딕셔너리들)
         self.load()              # 저장된 데이터가 있으면 불러온다
 
     # ========== 실행 / 메뉴 ==========
@@ -166,6 +169,7 @@ class QuizGame:
 
         score = round(earned)
         self.show_result(total, correct, hints_used, score)
+        self.add_history(total, correct, hints_used, score)
         self.update_best_score(score)
         self.save()
 
@@ -177,6 +181,17 @@ class QuizGame:
         if hints_used > 0:
             print(f"💡 힌트 사용: {hints_used}회 (힌트 사용 문제는 절반 점수)")
         print("=" * 40)
+
+    def add_history(self, total, correct, hints_used, score):
+        """이번 게임 기록을 히스토리에 추가한다."""
+        record = {
+            "date": datetime.now().strftime("%Y-%m-%d %H:%M"),
+            "total": total,
+            "correct": correct,
+            "hints_used": hints_used,
+            "score": score,
+        }
+        self.history.append(record)
 
     def update_best_score(self, score):
         """최고 점수와 비교해서 더 높으면 갱신한다."""
@@ -235,17 +250,30 @@ class QuizGame:
 
     # ========== 점수 확인 ==========
     def show_score(self):
-        """최고 점수를 보여준다."""
+        """최고 점수와 최근 게임 기록을 보여준다."""
         if self.best_score is None:
             print("\n📭 아직 퀴즈를 풀지 않았습니다. 먼저 퀴즈를 풀어 보세요!")
             return
         print(f"\n🏆 최고 점수: {self.best_score}점")
+
+        if not self.history:
+            return
+        recent = self.history[-self.RECENT_HISTORY_COUNT:]
+        print(f"\n📜 최근 게임 기록 (총 {len(self.history)}회 중 최근 {len(recent)}회)")
+        print("-" * 40)
+        for record in reversed(recent):  # 최신 기록부터 출력
+            print(f"{record.get('date', '-')} | "
+                  f"{record.get('correct', 0)}/{record.get('total', 0)} 정답 | "
+                  f"힌트 {record.get('hints_used', 0)}회 | "
+                  f"{record.get('score', 0)}점")
+        print("-" * 40)
 
     # ========== 파일 저장 / 불러오기 ==========
     def reset_to_default(self):
         """기본 퀴즈 데이터로 초기화한다."""
         self.quizzes = get_default_quizzes()
         self.best_score = None
+        self.history = []
 
     def load(self):
         """state.json에서 데이터를 불러온다.
@@ -258,9 +286,13 @@ class QuizGame:
             best_score = data.get("best_score")
             if best_score is not None and not isinstance(best_score, int):
                 raise ValueError("best_score 형식이 잘못되었습니다.")
+            history = data.get("history", [])  # 예전 파일에는 history가 없을 수 있다
+            if not isinstance(history, list) or not all(isinstance(r, dict) for r in history):
+                raise ValueError("history 형식이 잘못되었습니다.")
 
             self.quizzes = quizzes
             self.best_score = best_score
+            self.history = history
             best_text = "기록 없음" if best_score is None else f"{best_score}점"
             print(f"📂 저장된 데이터를 불러왔습니다. (퀴즈 {len(quizzes)}개, 최고점수 {best_text})")
 
@@ -281,10 +313,11 @@ class QuizGame:
             self.reset_to_default()
 
     def save(self):
-        """현재 퀴즈 목록과 최고 점수를 state.json에 저장한다."""
+        """현재 퀴즈 목록, 최고 점수, 게임 기록을 state.json에 저장한다."""
         data = {
             "quizzes": [quiz.to_dict() for quiz in self.quizzes],
             "best_score": self.best_score,
+            "history": self.history,
         }
         try:
             with open(STATE_FILE, "w", encoding="utf-8") as f:
