@@ -14,6 +14,7 @@
 5. [파일 구조](#5-파일-구조)
 6. [프로그램 실행 흐름](#6-프로그램-실행-흐름)
 7. [데이터 파일 설명 (state.json)](#7-데이터-파일-설명-statejson)
+   - [데이터 백업과 복구](#데이터-백업과-복구)
 8. [실행 화면](#8-실행-화면)
 
 **학습 노트**
@@ -38,8 +39,8 @@
 퀴즈와 최고 점수, 게임 기록은 `state.json` 파일에 저장되어 **프로그램을 종료했다가 다시 실행해도 유지**됩니다.
 
 - **언어:** Python 3.10 이상
-- **외부 라이브러리:** 없음 (표준 라이브러리 `json`, `os`, `random`, `datetime`, `sys`만 사용)
-- **클래스:** `Quiz`(문제 1개), `QuizGame`(게임 전체)
+- **외부 라이브러리:** 없음 (표준 라이브러리 `json`, `os`, `shutil`, `random`, `datetime`, `sys`만 사용)
+- **클래스:** `Quiz`(문제 1개), `QuizGame`(게임 전체), `BackupManager`(백업과 복구 기록)
 
 ## 2. 퀴즈 주제 및 선정 이유
 
@@ -76,6 +77,7 @@ python main.py
 - **퀴즈 삭제:** 삭제 후 바로 파일에 반영합니다.
 - **점수 기록 히스토리:** 모든 게임 기록을 날짜/시간과 함께 저장합니다.
 - **화면 꾸미기:** 색상, 진행률 막대, 점수별 응원 문구를 표시합니다.
+- **데이터 백업과 복구:** 저장하기 전에 자동으로 백업하고, 파일이 손상되면 사용자가 고른 백업으로 복원합니다. 복구 내역은 로그로 남깁니다. ([자세히](#데이터-백업과-복구))
 
 ### 점수 계산 규칙
 
@@ -89,7 +91,8 @@ python main.py
 - 숫자 입력은 앞뒤 공백을 제거한 뒤 처리합니다.
 - 빈 입력, 숫자가 아닌 입력(`abc`), 범위 밖 숫자(`9`, `0`)는 안내 메시지를 보여주고 다시 입력받습니다.
 - `Ctrl+C`(KeyboardInterrupt)나 입력 종료(EOFError)가 발생하면 데이터를 저장하고 안전하게 종료합니다.
-- `state.json`이 없으면 기본 퀴즈로 시작하고, 손상되었으면 안내 메시지를 보여준 뒤 기본 퀴즈 데이터로 복구합니다.
+- `state.json`이 없으면 기본 퀴즈로 시작합니다.
+- `state.json`이 손상되었으면 손상된 파일을 보관한 뒤, **백업에서 복원할지 기본 데이터로 초기화할지 선택**하게 합니다.
 
 ## 5. 파일 구조
 
@@ -100,7 +103,12 @@ quiz-game/
 ├── quiz_game.py     # QuizGame 클래스: 메뉴, 입력 처리, 게임 진행, 저장/불러오기
 ├── quiz_data.py     # 기본 퀴즈 7개 (Quiz 인스턴스)
 ├── ui.py            # 화면 꾸미기 (색상, 구분선, 진행률 막대)
+├── backup.py        # BackupManager 클래스: 백업 생성, 백업 목록, 복구 로그
 ├── state.json       # 저장 데이터 (실행 시 자동 생성, Git에는 올리지 않음)
+├── backups/         # 백업 폴더 (자동 생성, Git에는 올리지 않음)
+│   ├── state_20261117_203105.json      # 정상 백업 (최근 5개 보관)
+│   ├── corrupted_20261117_203210.json  # 손상되었던 파일 보관본
+│   └── recovery.log                    # 복구 기록
 ├── docs/
 │   └── screenshots/ # 실행 화면 캡처
 ├── .gitignore
@@ -119,7 +127,12 @@ quiz-game/
 - 입력 처리: `read_input()`, `get_number()`, `get_text()`, `ask_yes_no()`, `get_answer()`
 - 기능: `play()`, `add_quiz()`, `list_quizzes()`, `show_score()`, `delete_quiz()`
 - 결과/기록: `show_result()`, `add_history()`, `update_best_score()`
-- 저장/불러오기: `load()`, `save()`, `reset_to_default()`
+- 저장/불러오기: `load()`, `read_state()`, `save()`, `reset_to_default()`
+- 복구: `recover_from_corruption()`, `find_valid_backups()`
+
+**`BackupManager`** (`backup.py`): 백업 파일과 복구 로그를 관리
+- 속성: `state_file`, `backup_dir`, `log_file`, `MAX_BACKUPS`(5)
+- 메서드: `create_backup()`, `backup_corrupted()`, `list_backups()`, `write_log()`
 
 ## 6. 프로그램 실행 흐름
 
@@ -133,7 +146,9 @@ main()  ── try ────────────────────�
 QuizGame()  →  __init__()  →  load()                      │
    │             state.json 있음  → 불러오기               │
    │             state.json 없음  → 기본 퀴즈             │
-   │             state.json 손상  → 기본 퀴즈로 복구       │
+   │             state.json 손상  → 복구 절차             │
+   │               (손상 파일 보관 → 백업/초기화 선택      │
+   │                → 저장 → 로그 기록)                   │
    ▼                                                      │
 run()  ── while True 반복 ──┐                             │
    │   show_menu()          │                             │
@@ -146,6 +161,8 @@ run()  ── while True 반복 ──┐                             │
    │   6 → save() 후 break → 종료                          │
    │                                                      │
    └─ Ctrl+C / EOF 발생 → except → save() 후 안전하게 종료 ─┘
+
+※ save()는 state.json을 덮어쓰기 직전에 항상 백업을 먼저 만듭니다.
 ```
 
 ## 7. 데이터 파일 설명 (`state.json`)
@@ -197,6 +214,68 @@ run()  ── while True 반복 ──┐                             │
   ]
 }
 ```
+
+### 데이터 백업과 복구
+
+#### 백업 파일
+
+| 파일 | 언제 생기나 | 보관 |
+|---|---|---|
+| `backups/state_시간.json` | `state.json`을 **덮어쓰기 직전** | 최근 5개 (오래된 것 자동 삭제) |
+| `backups/corrupted_시간.json` | 손상된 파일을 **발견했을 때** | 삭제하지 않음 (원인 확인용) |
+| `backups/recovery.log` | 복구를 **진행할 때마다** | 한 줄씩 계속 추가 |
+
+- 파일 이름의 시간은 `연월일_시분초` 형식입니다. (예: `state_20261117_203105.json` = 2026년 11월 17일 20시 31분 05초)
+- 퀴즈 추가, 삭제, 풀기, 종료로 저장할 때마다 **바로 이전 상태**가 백업으로 남습니다.
+- `backups/` 폴더는 `.gitignore`에 등록해서 저장소에 올리지 않습니다.
+
+#### 자동 복구 절차 (프로그램 실행 시)
+
+`state.json`이 손상된 상태로 프로그램을 실행하면 아래 순서로 진행됩니다.
+
+1. **손상 감지:** `load()`에서 JSON 문법 오류나 형식 오류가 발생
+2. **손상 파일 보관:** 손상된 파일을 `backups/corrupted_시간.json`으로 복사 (지우지 않고 남겨 둠)
+3. **백업 검사:** `backups/`의 백업을 최신순으로 읽어 보고, **정상적으로 읽히는 것만** 목록에 표시
+4. **사용자 선택:**
+   ```
+   🛟 복구 방법을 선택하세요.
+     0. 기본 퀴즈 데이터로 초기화
+     1. 백업 state_20261117_203105.json (퀴즈 9개, 최고점수 86점)
+     2. 백업 state_20261117_202950.json (퀴즈 8개, 최고점수 86점)
+   선택:
+   ```
+   - 원하는 시점의 백업 번호를 고르면 그 버전으로 복원됩니다.
+   - 사용 가능한 백업이 하나도 없으면 선택 없이 기본 데이터로 초기화합니다.
+5. **저장:** 복구한 데이터를 `state.json`에 저장
+6. **로그 기록:** `backups/recovery.log`에 복구 내역 기록
+   ```
+   [2026-11-17 20:32:10] 손상 감지 → 손상 파일 보관(corrupted_20261117_203210.json) → 백업 state_20261117_203105.json에서 복원 (사용자 선택)
+   ```
+
+> 복구 선택 도중 `Ctrl+C`로 종료하면 `state.json`은 바뀌지 않고, 다음 실행 때 다시 복구를 선택할 수 있습니다.
+
+#### 수동 복원 절차 (원하는 시점으로 되돌리기)
+
+파일이 손상되지 않았더라도, 실수로 퀴즈를 지웠을 때처럼 **이전 버전으로 되돌리고 싶을 때** 사용합니다.
+
+1. 프로그램을 **종료**합니다. (실행 중에 바꾸면 종료할 때 덮어써집니다)
+2. `backups/` 폴더에서 되돌리고 싶은 시간의 `state_시간.json`을 찾습니다.
+3. 현재 `state.json`을 다른 이름으로 바꿔 둡니다. (예: `state_old.json`)
+4. 고른 백업 파일을 프로젝트 루트에 복사한 뒤 이름을 `state.json`으로 바꿉니다.
+5. `python main.py`로 실행해서 "저장된 데이터를 불러왔습니다 (퀴즈 N개...)"를 확인합니다.
+
+Windows PowerShell 예시:
+```bash
+copy state.json state_old.json
+copy backups\state_20261117_203105.json state.json
+```
+
+#### 복구 동작 테스트 방법
+
+1. 퀴즈를 2~3개 추가해서 백업을 만듭니다.
+2. 종료한 뒤 `state.json` 내용을 `{{{`로 바꿔 저장합니다.
+3. 실행 → 복구 선택 목록이 나오는지 확인 → 백업 번호 선택
+4. 목록(3번 메뉴)에서 퀴즈가 돌아왔는지, `backups/recovery.log`에 기록이 남았는지 확인
 
 ## 8. 실행 화면
 
@@ -530,7 +609,7 @@ try:
 except FileNotFoundError:                 # 파일 없음 (첫 실행)
     기본 퀴즈로 시작
 except (json.JSONDecodeError, KeyError, TypeError, AttributeError, ValueError):
-    손상 안내 → 기본 퀴즈로 복구 → 바로 저장
+    손상 안내 → recover_from_corruption() (백업 선택 복구)
 except OSError:                           # 권한 문제 등 기타 파일 오류
     기본 퀴즈로 시작
 ```
@@ -560,7 +639,7 @@ except (KeyboardInterrupt, EOFError):   # Ctrl+C, 입력 종료
 <details>
 <summary>예상 질문: 데이터 파일이 손상되면 어떻게 동작하나요?</summary>
 
-`load()`에서 JSON 문법 오류나 형식 오류(`KeyError`, `ValueError` 등)가 발생하면 except가 잡아서 "손상되어 복구합니다" 메시지를 출력하고, `reset_to_default()`로 기본 퀴즈 데이터로 되돌린 뒤 `save()`로 정상 파일을 다시 씁니다. 그래서 프로그램이 멈추지 않고 계속 실행됩니다.
+`load()`에서 JSON 문법 오류나 형식 오류(`KeyError`, `ValueError` 등)가 발생하면 except가 잡아서 `recover_from_corruption()`을 호출합니다. 손상된 파일을 `backups/corrupted_시간.json`으로 보관하고, 정상적으로 읽히는 백업 목록을 보여준 뒤 사용자가 고른 백업으로 복원하거나 기본 데이터로 초기화합니다. 마지막으로 저장하고 `recovery.log`에 기록합니다. 프로그램은 멈추지 않고 계속 실행됩니다.
 </details>
 
 <details>
@@ -573,6 +652,44 @@ except (KeyboardInterrupt, EOFError):   # Ctrl+C, 입력 종료
 <summary>예상 질문: if game is not None은 왜 있나요?</summary>
 
 `QuizGame()`을 만드는 도중(예: 불러오기 중)에 Ctrl+C가 눌리면 `game`에 아직 객체가 들어가지 않은 상태(`None`)입니다. 이때 `game.save()`를 호출하면 또 다른 오류가 나기 때문에, 객체가 만들어진 경우에만 저장합니다.
+</details>
+
+#### 백업에 쓰인 파일 다루기 (`backup.py`)
+
+```python
+shutil.copy2(self.state_file, backup_path)       # 파일 복사 (수정 시간 정보까지 유지)
+os.makedirs(self.backup_dir, exist_ok=True)      # 폴더 만들기 (이미 있어도 오류 없음)
+names = os.listdir(self.backup_dir)              # 폴더 안 파일 이름 목록
+os.remove(old_path)                              # 파일 삭제 (오래된 백업 정리)
+
+with open(self.log_file, "a", encoding="utf-8") as f:   # "a": 기존 내용 뒤에 추가
+    f.write(f"[{now}] {message}\n")
+```
+
+| 모드 | 의미 | 사용한 곳 |
+|---|---|---|
+| `"r"` | 읽기 | `read_state()` |
+| `"w"` | 덮어쓰기 (기존 내용 삭제) | `save()` |
+| `"a"` | 뒤에 추가 (기존 내용 유지) | `write_log()` |
+
+**백업 정리 원리:** 파일 이름에 `연월일_시분초`가 들어 있어서 **이름순 정렬 = 시간순 정렬**입니다. `sort(reverse=True)`로 최신순으로 정렬한 뒤 `[5:]`(6번째 이후)를 삭제합니다.
+
+<details>
+<summary>예상 질문: 백업 기능을 왜 QuizGame이 아니라 별도 클래스로 만들었나요?</summary>
+
+백업 파일 만들기, 목록 찾기, 오래된 백업 정리, 로그 쓰기는 "게임 진행"과 다른 책임이기 때문입니다. `BackupManager`로 분리하면 `QuizGame`은 "언제 백업할지"만 결정하고, "어떻게 백업할지"는 `backup.py`만 보면 됩니다. 백업 개수나 폴더 위치를 바꿀 때도 `backup.py`만 수정하면 됩니다.
+</details>
+
+<details>
+<summary>예상 질문: 복구한 뒤 저장할 때는 왜 백업을 만들지 않나요? (make_backup=False)</summary>
+
+복구 직후의 `state.json`은 **손상된 파일**입니다. 이때 평소처럼 저장 전에 백업하면 손상된 파일이 정상 백업(`state_시간.json`)으로 들어가서, 다음 복구 때 선택지에 섞이고 좋은 백업 하나를 밀어내게 됩니다. 손상 파일은 이미 `corrupted_시간.json`으로 따로 보관했으므로 `save(make_backup=False)`로 저장합니다.
+</details>
+
+<details>
+<summary>예상 질문: 백업 파일도 손상되어 있으면 어떻게 되나요?</summary>
+
+`find_valid_backups()`가 각 백업을 `read_state()`로 실제로 읽어 보고, 예외가 나는 백업은 `continue`로 건너뜁니다. 그래서 선택 목록에는 정상적으로 읽히는 백업만 나옵니다. 정상 백업이 하나도 없으면 자동으로 기본 데이터로 초기화합니다.
 </details>
 
 ### 9-4. 보너스 기능에 쓰인 개념
@@ -731,12 +848,17 @@ pull은 `fetch`(원격 저장소의 새 기록을 내려받기)와 `merge`(내 �
 - 무엇: 번호 선택 → y/n 확인 → `pop()` → 저장.
 - 포인트: 화면 번호는 1부터, 인덱스는 0부터라서 `number - 1`. 0이나 n이면 취소.
 
-**10. 시연 순서 (실행 화면으로 보여주기)**
+**10. 백업과 복구 - `BackupManager`, `QuizGame.recover_from_corruption()`**
+- 무엇: 저장 전에 자동 백업(최근 5개 유지), 손상 시 손상 파일 보관 → 정상 백업 목록 → 사용자 선택 → 저장 → 로그.
+- 포인트: 백업 책임을 별도 클래스로 분리했고, 복구 저장 때는 `make_backup=False`로 손상 파일이 백업에 섞이지 않게 합니다. → [7. 데이터 백업과 복구](#데이터-백업과-복구)
+
+**11. 시연 순서 (실행 화면으로 보여주기)**
 1. 메뉴에서 `abc`, `9`, 빈 입력 → 재입력 (예외 처리)
 2. 퀴즈 풀기: 문제 수 선택 → 힌트(`h`) 사용 → 결과와 최고 점수
 3. 퀴즈 추가 → 목록에서 확인
 4. 종료 후 다시 실행 → "저장된 데이터를 불러왔습니다" (데이터 유지)
-5. `git log --oneline --graph`로 브랜치/병합 기록
+5. `state.json`을 `{{{`로 망가뜨리고 실행 → 백업 선택해서 복원 → `recovery.log` 확인
+6. `git log --oneline --graph`로 브랜치/병합 기록
 
 ---
 
@@ -759,6 +881,7 @@ pull은 `fetch`(원격 저장소의 새 기록을 내려받기)와 `merge`(내 �
 | `feature/delete` | 퀴즈 삭제 |
 | `feature/history` | 게임 기록 히스토리 |
 | `feature/ui` | 터미널 색상 및 진행률 표시 |
+| `feature/backup` | 데이터 백업과 복구 |
 
 ### `git log --oneline --graph` 출력
 
@@ -867,6 +990,7 @@ pull은 `fetch`(원격 저장소의 새 기록을 내려받기)와 `merge`(내 �
 - `quiz_data.py` → **기본 퀴즈 데이터** (`get_default_quizzes()`)
 - `quiz_game.py` → **게임 진행** (`QuizGame` 클래스: 메뉴, 입력, 점수, 저장/불러오기)
 - `ui.py` → **화면 출력** (색상, 구분선, 진행률)
+- `backup.py` → **백업과 복구 로그** (`BackupManager` 클래스)
 - `main.py` → **프로그램 시작과 비정상 종료 처리**
 
 ### 변경 사례별 수정 대상
@@ -925,6 +1049,13 @@ pull은 `fetch`(원격 저장소의 새 기록을 내려받기)와 `merge`(내 �
 **10. 종료 처리 변경** (Ctrl+C, 입력 종료 시 동작)
 - `main.py`의 `main()` → `KeyboardInterrupt`, `EOFError` 처리
 
+**11. 백업/복구 정책 변경** (예: 백업 개수, 백업 폴더 위치, 자동 복구로 변경)
+- `BackupManager.MAX_BACKUPS` → 보관할 백업 개수
+- `BackupManager.__init__()` → 백업 폴더와 로그 파일 경로
+- `BackupManager.create_backup()` → 백업 만드는 방식
+- `QuizGame.save()` → 언제 백업할지 (`make_backup` 매개변수)
+- `QuizGame.recover_from_corruption()` → 복구 순서, 사용자 선택 여부 (예: 선택 없이 최신 백업 자동 복원)
+
 ### 수정 후 확인할 것
 
 1. `python main.py`로 바뀐 기능 실행
@@ -958,6 +1089,7 @@ pull은 `fetch`(원격 저장소의 새 기록을 내려받기)와 `merge`(내 �
 - [ ] 파일을 열고, 읽고, 쓰는 과정과 `with`의 역할 → [9-3](#파일-열기--읽기--쓰기)
 - [ ] JSON이 무엇이고 왜 썼는지 → [9-3 JSON](#json)
 - [ ] `try/except`로 처리한 오류의 종류와 순서 → [9-3 try/except](#try--except)
+- [ ] 백업을 언제 만들고, 손상 시 어떻게 복구하는지 → [7. 데이터 백업과 복구](#데이터-백업과-복구)
 
 **Git 기초**
 - [ ] Git이 무엇이고 왜 필요한지 → [9-5](#git이란-왜-필요한가)
