@@ -4,6 +4,7 @@ import random
 from datetime import datetime
 
 import ui
+from backup import BackupManager
 from quiz import Quiz
 from quiz_data import get_default_quizzes
 
@@ -21,6 +22,7 @@ class QuizGame:
         self.quizzes = []        # Quiz 객체들의 리스트
         self.best_score = None   # 최고 점수 (아직 안 풀었으면 None)
         self.history = []        # 게임 기록 리스트 (딕셔너리들)
+        self.backup = BackupManager(STATE_FILE)  # 백업/복구 담당
         self.load()              # 저장된 데이터가 있으면 불러온다
 
     # ========== 실행 / 메뉴 ==========
@@ -277,20 +279,27 @@ class QuizGame:
         self.best_score = None
         self.history = []
 
+    def read_state(self, path):
+        """데이터 파일을 읽어 (퀴즈 목록, 최고 점수, 기록)을 반환한다.
+        파일이 없거나 형식이 잘못되었으면 예외가 그대로 발생한다."""
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        quizzes = [Quiz.from_dict(item) for item in data["quizzes"]]
+        best_score = data.get("best_score")
+        if best_score is not None and not isinstance(best_score, int):
+            raise ValueError("best_score 형식이 잘못되었습니다.")
+        history = data.get("history", [])  # 예전 파일에는 history가 없을 수 있다
+        if not isinstance(history, list) or not all(isinstance(r, dict) for r in history):
+            raise ValueError("history 형식이 잘못되었습니다.")
+
+        return quizzes, best_score, history
+
     def load(self):
         """state.json에서 데이터를 불러온다.
-        파일이 없거나 손상되었으면 기본 퀴즈 데이터를 사용한다."""
+        파일이 없으면 기본 퀴즈 데이터를 쓰고, 손상되었으면 복구 절차를 진행한다."""
         try:
-            with open(STATE_FILE, "r", encoding="utf-8") as f:
-                data = json.load(f)
-
-            quizzes = [Quiz.from_dict(item) for item in data["quizzes"]]
-            best_score = data.get("best_score")
-            if best_score is not None and not isinstance(best_score, int):
-                raise ValueError("best_score 형식이 잘못되었습니다.")
-            history = data.get("history", [])  # 예전 파일에는 history가 없을 수 있다
-            if not isinstance(history, list) or not all(isinstance(r, dict) for r in history):
-                raise ValueError("history 형식이 잘못되었습니다.")
+            quizzes, best_score, history = self.read_state(STATE_FILE)
 
             self.quizzes = quizzes
             self.best_score = best_score
@@ -304,18 +313,71 @@ class QuizGame:
             print("📂 저장된 데이터가 없어 기본 퀴즈로 시작합니다.")
 
         except (json.JSONDecodeError, KeyError, TypeError, AttributeError, ValueError):
-            # 파일 내용이 깨졌거나 형식이 맞지 않음
-            ui.warn("데이터 파일이 손상되어 기본 퀴즈 데이터로 복구합니다.")
-            self.reset_to_default()
-            self.save()
+            # 파일 내용이 깨졌거나 형식이 맞지 않음 → 복구 절차
+            ui.warn("데이터 파일이 손상되었습니다. 복구를 시작합니다.")
+            self.recover_from_corruption()
 
         except OSError:
             # 권한 문제 등으로 파일을 읽을 수 없음
             ui.warn("데이터 파일을 읽을 수 없어 기본 퀴즈 데이터로 시작합니다.")
             self.reset_to_default()
 
-    def save(self):
-        """현재 퀴즈 목록, 최고 점수, 게임 기록을 state.json에 저장한다."""
+    def find_valid_backups(self):
+        """백업 파일 중 정상적으로 읽히는 것만 골라 (경로, 데이터) 목록으로 반환한다."""
+        valid = []
+        for path in self.backup.list_backups():
+            try:
+                valid.append((path, self.read_state(path)))
+            except (OSError, json.JSONDecodeError, KeyError, TypeError, AttributeError, ValueError):
+                continue  # 백업도 손상되었으면 목록에서 제외
+        return valid
+
+    def recover_from_corruption(self):
+        """손상된 파일을 보관하고, 사용자가 고른 방법(백업 복원 / 기본 데이터)으로 복구한다."""
+        # 1단계: 손상된 파일을 지우지 않고 따로 보관
+        corrupted_path = self.backup.backup_corrupted()
+        if corrupted_path is not None:
+            ui.info(f"손상된 파일을 보관했습니다: backups/{os.path.basename(corrupted_path)}")
+
+        # 2단계: 정상적으로 읽히는 백업 찾기
+        valid_backups = self.find_valid_backups()
+
+        # 3단계: 복구 방법 선택
+        if not valid_backups:
+            ui.warn("사용할 수 있는 백업이 없어 기본 퀴즈 데이터로 초기화합니다.")
+            self.reset_to_default()
+            method = "기본 데이터로 초기화 (사용 가능한 백업 없음)"
+        else:
+            print("\n🛟 복구 방법을 선택하세요.")
+            print("  0. 기본 퀴즈 데이터로 초기화")
+            for i, (path, (quizzes, best_score, _)) in enumerate(valid_backups, start=1):
+                best_text = "기록 없음" if best_score is None else f"{best_score}점"
+                print(f"  {i}. 백업 {os.path.basename(path)} (퀴즈 {len(quizzes)}개, 최고점수 {best_text})")
+            choice = self.get_number("선택: ", 0, len(valid_backups))
+
+            if choice == 0:
+                self.reset_to_default()
+                method = "기본 데이터로 초기화 (사용자 선택)"
+            else:
+                path, (quizzes, best_score, history) = valid_backups[choice - 1]
+                self.quizzes = quizzes
+                self.best_score = best_score
+                self.history = history
+                method = f"백업 {os.path.basename(path)}에서 복원 (사용자 선택)"
+
+        # 4단계: 복구한 데이터를 저장 (손상 파일은 이미 보관했으므로 다시 백업하지 않음)
+        self.save(make_backup=False)
+        ui.success(f"복구 완료: {method}")
+
+        # 5단계: 복구 로그 기록
+        kept = os.path.basename(corrupted_path) if corrupted_path else "보관 실패"
+        self.backup.write_log(f"손상 감지 → 손상 파일 보관({kept}) → {method}")
+
+    def save(self, make_backup=True):
+        """현재 퀴즈 목록, 최고 점수, 게임 기록을 state.json에 저장한다.
+        make_backup이 True면 덮어쓰기 전에 기존 파일을 백업한다."""
+        if make_backup:
+            self.backup.create_backup()
         data = {
             "quizzes": [quiz.to_dict() for quiz in self.quizzes],
             "best_score": self.best_score,
