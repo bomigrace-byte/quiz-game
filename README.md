@@ -66,41 +66,77 @@ python main.py
 
 ## 학습 목표 달성 현황
 
-미션 가이드의 **학습 목표 15개**를 이 프로젝트의 어디에서 구현했는지 정리했습니다.
-평가할 때는 표의 **시연 방법**대로 실행해 보고, **학습 목표**를 누르면 개념 설명과 예상 질문으로 이동합니다.
+미션 가이드의 **학습 목표 15개**를 이 프로젝트의 어디에서 구현했는지 정리했습니다.<br>
+**📘 개념**은 일반적인 설명, **🔍 코드 설명**은 이 프로젝트 코드로 한 설명과 예상 질문입니다.
 
 ### 🐍 Python 기초
 
-| # | 학습 목표 | 구현한 곳 | 시연 방법 |
-|:-:|---|---|---|
-| 1 | [변수의 의미와<br>사용 이유](#변수) | `play()`의<br>`correct`, `earned` | 퀴즈를 풀고<br>결과 점수 확인 |
-| 2 | [`int` `str` `bool`<br>`list` `dict`의 차이](#자료형-int-str-bool-list-dict) | `Quiz.__init__()`<br>`add_history()` | `state.json`<br>열어 보기 |
-| 3 | [`if/elif/else`<br>조건 분기](#조건문-if--elif--else) | `run()`의<br>메뉴 분기 | 메뉴 1~6<br>선택 |
-| 4 | [`for`와 `while`의<br>차이](#반복문-for-vs-while) | `play()`의 for<br>`get_number()`의 while | 정해진 문제 수만큼 출제<br>잘못된 입력은 다시 묻기 |
-| 5 | [함수, 매개변수,<br>반환값](#함수-정의-매개변수-반환값) | `get_number()` | 메뉴·정답·삭제에서<br>재사용 |
+**1. 변수의 의미와 사용 이유** &nbsp; [📘 개념](#개념-1-변수) · [🔍 코드 설명](#변수)<br>
+💻 **구현:** `play()`의 `correct`, `earned`<br>
+▶️ **시연:** 퀴즈를 풀고 결과 점수 확인
+
+**2. `int`, `str`, `bool`, `list`, `dict`의 차이** &nbsp; [📘 개념](#개념-2-자료형-int-str-bool-list-dict) · [🔍 코드 설명](#자료형-int-str-bool-list-dict)<br>
+💻 **구현:** `Quiz.__init__()`, `add_history()`<br>
+▶️ **시연:** `state.json`을 열어 자료형 확인
+
+**3. `if/elif/else` 조건 분기** &nbsp; [📘 개념](#개념-3-조건문-if--elif--else) · [🔍 코드 설명](#조건문-if--elif--else)<br>
+💻 **구현:** `run()`의 메뉴 분기<br>
+▶️ **시연:** 메뉴 1~6 선택
+
+**4. `for`와 `while`의 차이와 선택** &nbsp; [📘 개념](#개념-4-반복문-for-vs-while) · [🔍 코드 설명](#반복문-for-vs-while)<br>
+💻 **구현:** `play()`의 for, `get_number()`의 while<br>
+▶️ **시연:** 정해진 문제 수만큼 출제 / 잘못된 입력은 다시 묻기
+
+**5. 함수, 매개변수, 반환값** &nbsp; [📘 개념](#개념-5-함수-정의-매개변수-반환값) · [🔍 코드 설명](#함수-정의-매개변수-반환값)<br>
+💻 **구현:** `get_number(prompt, min_value, max_value)`<br>
+▶️ **시연:** 메뉴·정답·삭제에서 범위만 바꿔 재사용
+
 ### 🧱 클래스와 객체
 
-| # | 학습 목표 | 구현한 곳 | 시연 방법 |
-|:-:|---|---|---|
-| 6 | [클래스의 의미와<br>사용 이유](#클래스란) | `Quiz`, `QuizGame`<br>`BackupManager` | 파일 3개로<br>역할 분리 |
-| 7 | [`__init__`과 `self`의<br>역할](#__init__과-self) | `Quiz.__init__()`<br>`is_correct()` | 문제마다 다른<br>정답으로 채점 |
-| 8 | [속성과<br>메서드](#속성attribute과-메서드method) | `quiz.answer`<br>`quiz.is_correct()` | 퀴즈 목록<br>퀴즈 풀기 |
+**6. 클래스의 의미와 사용 이유** &nbsp; [📘 개념](#개념-6-클래스) · [🔍 코드 설명](#클래스란)<br>
+💻 **구현:** `Quiz`, `QuizGame`, `BackupManager`<br>
+▶️ **시연:** 파일 3개로 역할 분리
+
+**7. `__init__`과 `self`의 역할** &nbsp; [📘 개념](#개념-7-__init__과-self) · [🔍 코드 설명](#__init__과-self)<br>
+💻 **구현:** `Quiz.__init__()`, `Quiz.is_correct()`<br>
+▶️ **시연:** 문제마다 다른 정답으로 채점
+
+**8. 속성과 메서드 정의·활용** &nbsp; [📘 개념](#개념-8-속성과-메서드) · [🔍 코드 설명](#속성attribute과-메서드method)<br>
+💻 **구현:** `quiz.answer`(속성), `quiz.is_correct()`(메서드)<br>
+▶️ **시연:** 퀴즈 목록, 퀴즈 풀기
+
 ### 💾 파일 입출력
 
-| # | 학습 목표 | 구현한 곳 | 시연 방법 |
-|:-:|---|---|---|
-| 9 | [파일 열기·<br>읽기·쓰기](#파일-열기--읽기--쓰기) | `load()`, `save()`의<br>`with open` | 종료 후 다시 실행해도<br>데이터 유지 |
-| 10 | [JSON의 의미와<br>사용 이유](#json) | `json.load()`<br>`json.dump()` | `state.json`<br>열어 보기 |
-| 11 | [`try/except`<br>오류 처리](#try--except) | `get_number()`<br>`load()`, `main()` | `abc` 입력<br>파일 손상, `Ctrl+C` |
+**9. 파일 열기·읽기·쓰기** &nbsp; [📘 개념](#개념-9-파일-열기--읽기--쓰기) · [🔍 코드 설명](#파일-열기--읽기--쓰기)<br>
+💻 **구현:** `load()`, `save()`의 `with open(..., encoding="utf-8")`<br>
+▶️ **시연:** 퀴즈 추가 → 종료 → 다시 실행해도 데이터 유지
+
+**10. JSON의 의미와 사용 이유** &nbsp; [📘 개념](#개념-10-json) · [🔍 코드 설명](#json)<br>
+💻 **구현:** `json.load()`, `json.dump()`, `to_dict()`, `from_dict()`<br>
+▶️ **시연:** `state.json` 내용 보기
+
+**11. `try/except` 오류 처리** &nbsp; [📘 개념](#개념-11-try--except) · [🔍 코드 설명](#try--except)<br>
+💻 **구현:** `get_number()`, `load()`, `main()`<br>
+▶️ **시연:** `abc` 입력, `state.json` 손상, `Ctrl+C`
+
 ### 🌿 Git 기초
 
-| # | 학습 목표 | 구현한 곳 | 시연 방법 |
-|:-:|---|---|---|
-| 12 | [Git의 의미와<br>필요성](#git이란-왜-필요한가) | 기능 단위<br>커밋 이력 | `git log`<br>`--oneline` |
-| 13 | [Git 명령어<br>7종](#명령어-7종) | [Git 작업 기록](#11-git-작업-기록) | `git log`<br>`--oneline --graph` |
-| 14 | [브랜치 생성과<br>병합](#브랜치와-병합) | `feature/` 브랜치<br>→ `merge --no-ff` | 그래프의 갈라졌다<br>합쳐진 선 |
-| 15 | [`clone`과<br>`pull`](#clone과-pull의-차이) | clone 폴더에서 수정<br>→ 원래 폴더에서 pull | [clone/pull<br>실습 기록](#clone--pull-실습) |
-> 각 개념의 일반적인 설명은 [기본 개념 정리](#기본-개념-정리)에 있습니다.
+**12. Git의 의미와 필요성** &nbsp; [📘 개념](#개념-12-git) · [🔍 코드 설명](#git이란-왜-필요한가)<br>
+💻 **구현:** 기능 단위 커밋 이력<br>
+▶️ **시연:** `git log --oneline`
+
+**13. `init` `add` `commit` `push` `pull` `checkout` `clone`** &nbsp; [📘 개념](#개념-13-git-명령어-7종) · [🔍 코드 설명](#명령어-7종)<br>
+💻 **구현:** [11. Git 작업 기록](#11-git-작업-기록)<br>
+▶️ **시연:** `git log --oneline --graph`
+
+**14. 브랜치 생성과 병합** &nbsp; [📘 개념](#개념-14-브랜치-생성과-병합) · [🔍 코드 설명](#브랜치와-병합)<br>
+💻 **구현:** `feature/` 브랜치에서 작업 → `merge --no-ff`<br>
+▶️ **시연:** 그래프에서 갈라졌다 합쳐진 선 확인
+
+**15. `clone`과 `pull`로 변경사항 가져오기** &nbsp; [📘 개념](#개념-15-clone과-pull) · [🔍 코드 설명](#clone과-pull의-차이)<br>
+💻 **구현:** clone 폴더에서 수정 → 원래 폴더에서 pull ([실습 기록](#clone--pull-실습))<br>
+▶️ **시연:** 공용 컴퓨터에서 `git clone`으로 받아 실행
+
 > 15개 항목을 스스로 점검하려면 [과제 목표 셀프 체크리스트](#15-과제-목표-셀프-체크리스트)를 사용하세요.
 
 ---
@@ -1389,6 +1425,7 @@ pull은 `fetch`(원격 저장소의 새 기록을 내려받기)와 `merge`(내 �
 | `feature/readme-layout` | README 표 정렬, 줄바꿈, 실행 흐름도 개선 |
 | `feature/readme-toc` | 목차와 기능 카드를 가운데 정렬 레이아웃으로 변경 |
 | `feature/basic-concepts` | 학습 목표의 기본 개념 정리 (README, 랜딩 페이지) |
+| `feature/goals-list` | 학습 목표 현황을 표에서 항목 목록으로 변경 |
 
 ### `git log --oneline --graph` 출력
 
