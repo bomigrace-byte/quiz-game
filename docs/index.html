@@ -22,6 +22,7 @@
 
     <div class="buttons">
       <a class="button primary" href="#try">웹에서 맛보기</a>
+      <a class="button" href="#goals">학습 목표 보기</a>
       <a class="button" href="https://github.com/bomigrace-byte/quiz-game">GitHub 보기</a>
     </div>
   </header>
@@ -39,6 +40,121 @@
         <div class="card"><h3>🗑️ 퀴즈 삭제</h3><p>번호를 골라 삭제하고, 확인 단계에서 취소할 수 있습니다.</p></div>
         <div class="card"><h3>🛟 백업과 복구</h3><p>저장 전에 자동 백업하고, 파일이 손상되면 원하는 백업으로 복원합니다.</p></div>
       </div>
+    </section>
+
+    <!-- 학습 목표 -->
+    <section id="goals">
+      <h2>학습 목표 달성 현황</h2>
+      <p class="note">미션 가이드의 학습 목표 15개를 이 프로젝트의 어디에서 구현했는지 정리했습니다. 항목을 누르면 설명이 펼쳐집니다.</p>
+      <button id="toggle-goals">모두 펼치기</button>
+
+      <div class="goal-groups">
+        <div class="goal-group">
+          <h3>🐍 Python 기초</h3>
+          <details>
+            <summary><span class="num">1</span>변수의 의미와 사용 이유</summary>
+            <p class="where"><code>play()</code>의 <code>correct</code>, <code>earned</code></p>
+            <p>값에 이름을 붙여 저장해 두는 상자입니다. 문제를 풀 때마다 맞힌 개수를 <code>correct</code>에 기억해 두어야 마지막에 결과를 보여줄 수 있습니다.</p>
+            <p class="demo">▶ 시연: 퀴즈를 풀고 결과 점수 확인</p>
+          </details>
+          <details>
+            <summary><span class="num">2</span>int, str, bool, list, dict의 차이</summary>
+            <p class="where"><code>Quiz.__init__()</code>, <code>add_history()</code></p>
+            <p>정답 번호는 int, 문제는 str, 힌트 사용 여부는 bool, 선택지 4개는 list, 게임 기록 1건은 dict입니다. list는 번호로, dict는 이름(키)으로 값을 찾습니다.</p>
+            <p class="demo">▶ 시연: state.json을 열어 자료형 확인</p>
+          </details>
+          <details>
+            <summary><span class="num">3</span>if / elif / else 조건 분기</summary>
+            <p class="where"><code>run()</code>의 메뉴 분기</p>
+            <p>선택한 메뉴 번호에 따라 처음으로 참인 조건 하나만 실행합니다. 1~5가 아니면 else에서 저장 후 종료합니다.</p>
+            <p class="demo">▶ 시연: 메뉴 1~6 선택</p>
+          </details>
+          <details>
+            <summary><span class="num">4</span>for와 while의 차이와 선택</summary>
+            <p class="where"><code>play()</code>의 for, <code>run()</code>·<code>get_number()</code>의 while</p>
+            <p>출제는 정해진 문제 수만큼이라 for, 메뉴와 입력 검증은 몇 번 반복될지 모르기 때문에 while을 썼습니다.</p>
+            <p class="demo">▶ 시연: 문제 수만큼 출제 / 잘못된 입력을 넣으면 다시 묻기</p>
+          </details>
+          <details>
+            <summary><span class="num">5</span>함수, 매개변수, 반환값</summary>
+            <p class="where"><code>get_number(prompt, min_value, max_value)</code></p>
+            <p>범위를 매개변수로 받고, 검증을 통과한 숫자를 반환합니다. 메뉴, 정답 번호, 문제 수, 삭제 번호에서 범위만 바꿔 재사용합니다.</p>
+            <p class="demo">▶ 시연: 메뉴에서 9, 문제 수에서 100 입력 → 각각 다른 범위로 안내</p>
+          </details>
+        </div>
+
+        <div class="goal-group">
+          <h3>🧱 클래스와 객체</h3>
+          <details>
+            <summary><span class="num">6</span>클래스의 의미와 사용 이유</summary>
+            <p class="where"><code>Quiz</code>, <code>QuizGame</code>, <code>BackupManager</code></p>
+            <p>데이터와 기능을 묶은 설계도입니다. 문제 1개, 게임 전체, 백업을 각각 다른 클래스로 나눠서 고칠 곳을 찾기 쉽게 했습니다.</p>
+            <p class="demo">▶ 시연: quiz.py, quiz_game.py, backup.py 파일 구조 보기</p>
+          </details>
+          <details>
+            <summary><span class="num">7</span>__init__과 self의 역할</summary>
+            <p class="where"><code>Quiz.__init__()</code>, <code>Quiz.is_correct()</code></p>
+            <p><code>__init__</code>은 객체가 만들어질 때 자동으로 실행되어 속성을 준비합니다. <code>self</code>는 지금 사용 중인 그 객체 자신이라서, 문제마다 자기 정답과 비교할 수 있습니다.</p>
+            <p class="demo">▶ 시연: 문제마다 다른 정답으로 채점되는 것 확인</p>
+          </details>
+          <details>
+            <summary><span class="num">8</span>속성과 메서드 정의·활용</summary>
+            <p class="where"><code>quiz.answer</code>(속성) / <code>quiz.is_correct()</code>(메서드)</p>
+            <p>속성은 객체가 가진 데이터(괄호 없음), 메서드는 객체가 할 수 있는 동작(괄호 있음)입니다.</p>
+            <p class="demo">▶ 시연: 퀴즈 목록과 퀴즈 풀기</p>
+          </details>
+
+          <h3>💾 파일 입출력</h3>
+          <details>
+            <summary><span class="num">9</span>파일 열기·읽기·쓰기</summary>
+            <p class="where"><code>load()</code>, <code>save()</code>의 <code>with open(..., encoding="utf-8")</code></p>
+            <p>"r"로 읽고 "w"로 덮어씁니다. <code>with</code>는 블록이 끝나면 오류가 나도 파일을 자동으로 닫아 줍니다.</p>
+            <p class="demo">▶ 시연: 퀴즈 추가 → 종료 → 다시 실행해도 유지</p>
+          </details>
+          <details>
+            <summary><span class="num">10</span>JSON의 의미와 사용 이유</summary>
+            <p class="where"><code>json.load()</code> / <code>json.dump()</code>, <code>to_dict()</code> / <code>from_dict()</code></p>
+            <p>dict·list와 구조가 같아 변환이 쉽고, 사람이 직접 열어 볼 수 있으며, 표준 라이브러리만으로 처리할 수 있습니다.</p>
+            <p class="demo">▶ 시연: state.json 내용 보기</p>
+          </details>
+          <details>
+            <summary><span class="num">11</span>try / except 오류 처리</summary>
+            <p class="where"><code>get_number()</code>, <code>load()</code>, <code>main()</code></p>
+            <p>숫자 변환 실패(ValueError), 파일 없음·손상, Ctrl+C·입력 종료를 각각 잡아서 멈추지 않게 했습니다. 구체적인 오류를 먼저 잡습니다.</p>
+            <p class="demo">▶ 시연: abc 입력 / state.json을 {{{로 손상 / Ctrl+C</p>
+          </details>
+        </div>
+
+        <div class="goal-group">
+          <h3>🌿 Git 기초</h3>
+          <details>
+            <summary><span class="num">12</span>Git의 의미와 필요성</summary>
+            <p class="where">기능 단위 커밋 이력</p>
+            <p>파일의 변경 이력을 기록하는 버전 관리 도구입니다. 언제 무엇을 바꿨는지 남기고, 이전 상태로 되돌리고, 여러 사람이 나눠 작업할 수 있습니다.</p>
+            <p class="demo">▶ 시연: git log --oneline</p>
+          </details>
+          <details>
+            <summary><span class="num">13</span>init · add · commit · push · pull · checkout · clone</summary>
+            <p class="where">README의 Git 작업 기록</p>
+            <p>init은 저장소 만들기, add는 커밋할 파일 고르기, commit은 기록 저장, push는 GitHub에 올리기, pull은 받아서 합치기, checkout은 브랜치 이동, clone은 저장소 전체 복제입니다.</p>
+            <p class="demo">▶ 시연: git log --oneline --graph</p>
+          </details>
+          <details>
+            <summary><span class="num">14</span>브랜치 생성과 병합</summary>
+            <p class="where"><code>feature/</code> 브랜치 → <code>merge --no-ff</code></p>
+            <p>main은 항상 동작하는 상태로 두고, 기능마다 브랜치에서 작업한 뒤 병합했습니다. --no-ff로 병합 기록이 그래프에 남습니다.</p>
+            <p class="demo">▶ 시연: 그래프에서 갈라졌다 합쳐진 선 확인</p>
+          </details>
+          <details>
+            <summary><span class="num">15</span>clone과 pull로 변경사항 가져오기</summary>
+            <p class="where">quiz-game-clone에서 수정 → 원래 폴더에서 pull</p>
+            <p>clone은 저장소가 없을 때 처음 한 번 전체를 복사하고, pull은 이미 있는 저장소에 새 변경사항만 가져와 합칩니다.</p>
+            <p class="demo">▶ 시연: 공용 컴퓨터에서 git clone으로 받아 실행</p>
+          </details>
+        </div>
+      </div>
+
+      <p class="more"><a href="https://github.com/bomigrace-byte/quiz-game#학습-목표-달성-현황">README에서 코드 예시와 예상 질문까지 보기 →</a></p>
     </section>
 
     <!-- 3. 실행 화면 -->
@@ -84,6 +200,9 @@
         <li><b>feature/history</b> 게임 기록</li>
         <li><b>feature/ui</b> 색상과 진행률</li>
         <li><b>feature/backup</b> 백업과 복구</li>
+        <li><b>feature/landing</b> 프로젝트 소개 웹페이지</li>
+        <li><b>feature/readme-design</b> README 배너와 레이아웃</li>
+        <li><b>feature/learning-goals</b> 학습 목표 달성 현황</li>
       </ol>
     </section>
 
