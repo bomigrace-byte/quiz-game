@@ -1,34 +1,139 @@
-# 🎯 Python & Git 기초 상식 퀴즈
+<p align="center">
+  <img src="docs/banner.png" alt="Python & Git 기초 상식 퀴즈" width="100%">
+</p>
 
-> 터미널에서 동작하는 4지선다 퀴즈 게임입니다.
-> 이 README는 **프로젝트 설명서**이면서 동시에 **이 과제에서 배운 개념을 정리한 학습 노트**입니다.
-> 동료 평가 때 설명할 코드와 예상 질문도 함께 정리했습니다.
+<p align="center">
+  <a href="https://bomigrace-byte.github.io/quiz-game/"><img src="https://img.shields.io/badge/%EC%86%8C%EA%B0%9C_%ED%8E%98%EC%9D%B4%EC%A7%80-%EB%B0%94%EB%A1%9C%EA%B0%80%EA%B8%B0-22d3ee?style=for-the-badge" alt="소개 페이지 바로가기"></a>
+  <a href="#학습-목표-달성-현황"><img src="https://img.shields.io/badge/%ED%95%99%EC%8A%B5_%EB%AA%A9%ED%91%9C-15%EA%B0%9C-f472b6?style=for-the-badge" alt="학습 목표"></a>
+  <a href="#3-실행-방법"><img src="https://img.shields.io/badge/%EC%8B%A4%ED%96%89_%EB%B0%A9%EB%B2%95-%EB%B3%B4%EA%B8%B0-facc15?style=for-the-badge" alt="실행 방법"></a>
+  <a href="#9-개념-학습-가이드"><img src="https://img.shields.io/badge/%ED%95%99%EC%8A%B5_%EB%85%B8%ED%8A%B8-%EB%B3%B4%EA%B8%B0-4ade80?style=for-the-badge" alt="학습 노트"></a>
+</p>
 
-## 목차
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python 3.10+">
+  <img src="https://img.shields.io/badge/%EC%99%B8%EB%B6%80_%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC-%EC%97%86%EC%9D%8C-4ade80?style=flat-square" alt="외부 라이브러리 없음">
+  <img src="https://img.shields.io/github/commit-activity/t/bomigrace-byte/quiz-game?style=flat-square&logo=git&logoColor=white&label=commits&color=0f172a" alt="커밋 수">
+  <img src="https://img.shields.io/github/last-commit/bomigrace-byte/quiz-game?style=flat-square&label=last%20commit&color=0f172a" alt="마지막 커밋">
+</p>
 
-**프로젝트 설명**
-1. [프로젝트 개요](#1-프로젝트-개요)
-2. [퀴즈 주제 및 선정 이유](#2-퀴즈-주제-및-선정-이유)
-3. [실행 방법](#3-실행-방법)
-4. [기능 목록](#4-기능-목록)
-5. [파일 구조](#5-파일-구조)
-6. [프로그램 실행 흐름](#6-프로그램-실행-흐름)
-7. [데이터 파일 설명 (state.json)](#7-데이터-파일-설명-statejson)
-   - [데이터 백업과 복구](#데이터-백업과-복구)
-8. [실행 화면](#8-실행-화면)
+<p align="center">
+  <b>터미널에서 동작하는 4지선다 퀴즈 게임</b><br>
+  퀴즈를 풀면서 Python과 Git 개념을 복습하고, 점수와 기록은 <code>state.json</code>에 저장됩니다.
+</p>
 
-**학습 노트**
+<p align="center">
+  <sub>이 README는 <b>프로젝트 설명서</b>이자 이 과제에서 배운 개념을 정리한 <b>학습 노트</b>입니다.</sub>
+</p>
 
-9. [개념 학습 가이드](#9-개념-학습-가이드)
-10. [동료 평가 코드 설명 포인트](#10-동료-평가-코드-설명-포인트)
+---
 
-**개발 기록**
+<h3 align="center">✨ 한눈에 보기</h3>
 
-11. [Git 작업 기록](#11-git-작업-기록)
-12. [커밋 규칙](#12-커밋-규칙)
-13. [대량 데이터 처리 분석](#13-대량-데이터-처리-분석-퀴즈-1000개-이상)
-14. [요구사항 변경 시 수정 위치](#14-요구사항-변경-시-수정-위치)
-15. [과제 목표 셀프 체크리스트](#15-과제-목표-셀프-체크리스트)
+<table>
+  <tr>
+    <td align="center" width="33%"><h3>📝</h3><b>퀴즈 풀기</b><br><sub>문제 수 선택, 무작위 출제<br>100점 만점 채점</sub></td>
+    <td align="center" width="33%"><h3>➕</h3><b>퀴즈 추가</b><br><sub>문제, 선택지 4개<br>정답, 힌트 입력</sub></td>
+    <td align="center" width="33%"><h3>📋</h3><b>퀴즈 목록</b><br><sub>등록된 문제 확인<br>힌트 있는 문제는 💡</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><h3>🏆</h3><b>점수 확인</b><br><sub>최고 점수와<br>최근 5회 기록</sub></td>
+    <td align="center"><h3>🗑️</h3><b>퀴즈 삭제</b><br><sub>번호 선택 후 확인<br>0 또는 n으로 취소</sub></td>
+    <td align="center"><h3>🛟</h3><b>백업과 복구</b><br><sub>저장 전 자동 백업<br>손상 시 선택 복원</sub></td>
+  </tr>
+</table>
+
+<h3 align="center">🚀 빠른 시작</h3>
+
+```bash
+git clone https://github.com/bomigrace-byte/quiz-game.git
+cd quiz-game
+python main.py
+```
+
+<h3 align="center">📚 목차</h3>
+
+<table>
+  <tr>
+    <th width="33%">📖 프로젝트 설명</th>
+    <th width="33%">🧠 학습 노트</th>
+    <th width="33%">🛠️ 개발 기록</th>
+  </tr>
+  <tr>
+    <td valign="top">
+      1. <a href="#1-프로젝트-개요">프로젝트 개요</a><br>
+      2. <a href="#2-퀴즈-주제-및-선정-이유">주제 및 선정 이유</a><br>
+      3. <a href="#3-실행-방법">실행 방법</a><br>
+      4. <a href="#4-기능-목록">기능 목록</a><br>
+      5. <a href="#5-파일-구조">파일 구조</a><br>
+      6. <a href="#6-프로그램-실행-흐름">실행 흐름</a><br>
+      7. <a href="#7-데이터-파일-설명-statejson">데이터 파일 (state.json)</a><br>
+      &nbsp;&nbsp;&nbsp;· <a href="#데이터-백업과-복구">백업과 복구</a><br>
+      8. <a href="#8-실행-화면">실행 화면</a>
+    </td>
+    <td valign="top">
+      🎯 <a href="#학습-목표-달성-현황"><b>학습 목표 달성 현황</b></a><br>
+      9. <a href="#9-개념-학습-가이드">개념 학습 가이드</a><br>
+      &nbsp;&nbsp;&nbsp;· <a href="#9-1-python-기초">Python 기초</a><br>
+      &nbsp;&nbsp;&nbsp;· <a href="#9-2-클래스와-객체">클래스와 객체</a><br>
+      &nbsp;&nbsp;&nbsp;· <a href="#9-3-파일-입출력과-예외-처리">파일 입출력과 예외</a><br>
+      &nbsp;&nbsp;&nbsp;· <a href="#9-4-보너스-기능에-쓰인-개념">보너스 기능 개념</a><br>
+      &nbsp;&nbsp;&nbsp;· <a href="#9-5-git-기초">Git 기초</a><br>
+      10. <a href="#10-동료-평가-코드-설명-포인트">동료 평가 설명 포인트</a><br>
+      15. <a href="#15-과제-목표-셀프-체크리스트">셀프 체크리스트</a>
+    </td>
+    <td valign="top">
+      11. <a href="#11-git-작업-기록">Git 작업 기록</a><br>
+      12. <a href="#12-커밋-규칙">커밋 규칙</a><br>
+      13. <a href="#13-대량-데이터-처리-분석-퀴즈-1000개-이상">대량 데이터 분석</a><br>
+      14. <a href="#14-요구사항-변경-시-수정-위치">요구사항 변경 시 수정 위치</a>
+    </td>
+  </tr>
+</table>
+
+---
+
+
+## 학습 목표 달성 현황
+
+미션 가이드의 **학습 목표 15개**를 이 프로젝트의 어디에서 구현했는지 정리했습니다.
+평가할 때는 표의 **시연 방법**대로 실행해 보고, **설명** 링크에서 개념과 예상 질문을 확인할 수 있습니다.
+
+### 🐍 Python 기초
+
+| # | 학습 목표 | 구현한 곳 | 시연 방법 | 설명 |
+|:-:|---|---|---|:-:|
+| 1 | 변수의 의미와 사용 이유 | `play()`의 `correct`, `earned` | 퀴즈를 풀고 결과 점수 확인 | [보기](#변수) |
+| 2 | `int`, `str`, `bool`, `list`, `dict`의 차이 | `Quiz.__init__()`, `add_history()` | `state.json` 열어 보기 | [보기](#자료형-int-str-bool-list-dict) |
+| 3 | `if/elif/else` 조건 분기 | `run()`의 메뉴 분기 | 메뉴 1~6 선택 | [보기](#조건문-if--elif--else) |
+| 4 | `for`와 `while`의 차이와 선택 | `play()`의 `for`, `get_number()`의 `while` | 문제 수만큼 출제 / 잘못된 입력 반복 | [보기](#반복문-for-vs-while) |
+| 5 | 함수, 매개변수, 반환값 | `get_number(prompt, min_value, max_value)` | 메뉴·정답·삭제에서 범위만 바꿔 재사용 | [보기](#함수-정의-매개변수-반환값) |
+
+### 🧱 클래스와 객체
+
+| # | 학습 목표 | 구현한 곳 | 시연 방법 | 설명 |
+|:-:|---|---|---|:-:|
+| 6 | 클래스의 의미와 사용 이유 | `Quiz`, `QuizGame`, `BackupManager` | 파일 3개로 역할 분리 | [보기](#클래스란) |
+| 7 | `__init__`과 `self`의 역할 | `Quiz.__init__()`, `is_correct()` | 문제마다 다른 정답으로 채점 | [보기](#__init__과-self) |
+| 8 | 속성과 메서드 정의·활용 | `quiz.answer` / `quiz.is_correct()` | 퀴즈 목록, 퀴즈 풀기 | [보기](#속성attribute과-메서드method) |
+
+### 💾 파일 입출력
+
+| # | 학습 목표 | 구현한 곳 | 시연 방법 | 설명 |
+|:-:|---|---|---|:-:|
+| 9 | 파일 열기·읽기·쓰기 | `load()`, `save()`의 `with open` | 종료 후 다시 실행 → 데이터 유지 | [보기](#파일-열기--읽기--쓰기) |
+| 10 | JSON의 의미와 사용 이유 | `json.load()` / `json.dump()`, `to_dict()` / `from_dict()` | `state.json` 열어 보기 | [보기](#json) |
+| 11 | `try/except` 오류 처리 | `get_number()`, `load()`, `main()` | `abc` 입력, 파일 손상, `Ctrl+C` | [보기](#try--except) |
+
+### 🌿 Git 기초
+
+| # | 학습 목표 | 구현한 곳 | 시연 방법 | 설명 |
+|:-:|---|---|---|:-:|
+| 12 | Git의 의미와 필요성 | 기능 단위 커밋 이력 | `git log --oneline` | [보기](#git이란-왜-필요한가) |
+| 13 | `init`·`add`·`commit`·`push`·`pull`·`checkout`·`clone` | [Git 작업 기록](#11-git-작업-기록) | `git log --oneline --graph` | [보기](#명령어-7종) |
+| 14 | 브랜치 생성과 병합 | `feature/` 브랜치 → `merge --no-ff` | 그래프의 갈라졌다 합쳐진 선 | [보기](#브랜치와-병합) |
+| 15 | `clone`과 `pull`로 변경사항 가져오기 | clone 저장소에서 수정 → 원래 폴더에서 pull | [clone/pull 실습 기록](#clone--pull-실습) | [보기](#clone과-pull의-차이) |
+
+> 15개 항목을 스스로 점검하려면 [과제 목표 셀프 체크리스트](#15-과제-목표-셀프-체크리스트)를 사용하세요.
 
 ---
 
@@ -870,7 +975,7 @@ pull은 `fetch`(원격 저장소의 새 기록을 내려받기)와 `merge`(내 �
 
 ### 브랜치 및 병합 이력
 
-기능마다 별도 브랜치에서 작업한 뒤 `git merge --no-ff`로 `main`에 병합했습니다.
+기능과 문서 작업마다 별도 브랜치에서 작업한 뒤 `git merge --no-ff`로 `main`에 병합했습니다.
 
 | 브랜치 | 작업 내용 |
 |---|---|
@@ -882,6 +987,9 @@ pull은 `fetch`(원격 저장소의 새 기록을 내려받기)와 `merge`(내 �
 | `feature/history` | 게임 기록 히스토리 |
 | `feature/ui` | 터미널 색상 및 진행률 표시 |
 | `feature/backup` | 데이터 백업과 복구 |
+| `feature/landing` | 프로젝트 소개 웹페이지 (GitHub Pages) |
+| `feature/readme-design` | README 배너와 카드 레이아웃 |
+| `feature/learning-goals` | 학습 목표 달성 현황 정리 |
 
 ### `git log --oneline --graph` 출력
 
