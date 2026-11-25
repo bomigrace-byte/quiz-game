@@ -116,3 +116,12 @@ function showResult() {
 }
 
 startQuiz();
+
+// ===== 3. 학습 목표 모두 펼치기 / 접기 =====
+const toggleGoals = document.getElementById("toggle-goals");
+toggleGoals.addEventListener("click", function () {
+  const items = document.querySelectorAll("#goals details");
+  const shouldOpen = toggleGoals.textContent === "모두 펼치기";
+  items.forEach(function (item) { item.open = shouldOpen; });
+  toggleGoals.textContent = shouldOpen ? "모두 접기" : "모두 펼치기";
+});
