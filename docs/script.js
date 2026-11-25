@@ -125,3 +125,55 @@ toggleGoals.addEventListener("click", function () {
   items.forEach(function (item) { item.open = shouldOpen; });
   toggleGoals.textContent = shouldOpen ? "모두 접기" : "모두 펼치기";
 });
+
+// ===== 학습 목표 슬라이드 넘기기 =====
+const slides = [
+      { src: "slides/01-cover.png", title: "표지: 퀴즈 게임 하나로 4가지 기초를 익힌다" },
+      { src: "slides/02-map.png", title: "학습목표 지도: 4개 영역, 15개 목표" },
+      { src: "slides/03-variable.png", title: "목표 1. 변수는 값에 붙이는 이름표" },
+      { src: "slides/04-types.png", title: "목표 2. 자료형 5가지의 차이" },
+      { src: "slides/05-flow.png", title: "목표 3–5. 조건, 반복, 함수" },
+      { src: "slides/06-klass.png", title: "목표 6–8. 클래스와 객체" },
+      { src: "slides/07-fileio.png", title: "목표 9–11. 파일 입출력과 state.json" },
+      { src: "slides/08-git.png", title: "목표 12–13. Git 기본 흐름과 명령어 7종" },
+      { src: "slides/09-branch.png", title: "목표 14–15. 브랜치, clone과 pull" },
+      { src: "slides/10-mission.png", title: "정리: 목표는 미션 어디에서 확인되나" },
+      { src: "slides/11-check.png", title: "셀프 체크: 15개 질문" },
+];
+
+let slideIndex = 0;
+const slideImage = document.getElementById("slide-image");
+const slideCount = document.getElementById("slide-count");
+const slideCaption = document.getElementById("slide-caption");
+const thumbButtons = document.querySelectorAll(".thumb");
+
+function showSlide(index) {
+  // 처음에서 이전, 마지막에서 다음을 누르면 반대쪽 끝으로 돌아간다
+  slideIndex = (index + slides.length) % slides.length;
+  const slide = slides[slideIndex];
+  slideImage.src = slide.src;
+  slideImage.alt = slide.title;
+  slideCaption.innerHTML = "";
+  slideCount.textContent = (slideIndex + 1) + " / " + slides.length;
+  slideCaption.append(slideCount, " " + slide.title);
+  thumbButtons.forEach(function (button, i) {
+    button.classList.toggle("active", i === slideIndex);
+  });
+}
+
+document.getElementById("slide-prev").addEventListener("click", function () { showSlide(slideIndex - 1); });
+document.getElementById("slide-next").addEventListener("click", function () { showSlide(slideIndex + 1); });
+thumbButtons.forEach(function (button) {
+  button.addEventListener("click", function () { showSlide(Number(button.dataset.index)); });
+});
+
+// 슬라이드 영역이 화면에 보일 때만 키보드 ← → 로 넘긴다
+document.addEventListener("keydown", function (event) {
+  const box = document.getElementById("slides").getBoundingClientRect();
+  const visible = box.top < window.innerHeight && box.bottom > 0;
+  if (!visible) return;
+  if (event.key === "ArrowLeft") showSlide(slideIndex - 1);
+  if (event.key === "ArrowRight") showSlide(slideIndex + 1);
+});
+
+showSlide(0);
