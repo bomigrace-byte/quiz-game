@@ -19,6 +19,8 @@ body {
   color: var(--text);
   font-family: "Pretendard", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
   line-height: 1.6;
+  word-break: keep-all;      /* 한글을 어절(띄어쓰기) 단위로만 줄바꿈 */
+  overflow-wrap: break-word; /* 아주 긴 단어는 넘치지 않게 */
 }
 
 main { max-width: 960px; margin: 0 auto; padding: 0 16px; }
@@ -86,7 +88,10 @@ summary .num {
   background: var(--cyan); color: var(--bg); border-radius: 6px; font-size: 0.85rem;
 }
 details p { margin: 8px 0 0; color: var(--muted); }
-details .where { color: var(--text); }
+details .concept { color: var(--text); background: #0f172a; border-left: 3px solid var(--yellow); padding: 8px 10px; border-radius: 6px; }
+details .concept b { color: var(--yellow); }
+details .where { color: var(--cyan); }
+details .where::before { content: "💻 "; }
 details .demo { color: var(--green); }
 .more { margin-top: 16px; }
 
