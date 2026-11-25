@@ -1,0 +1,89 @@
+/* ===== 색상 모음 (여기만 바꾸면 전체 색이 바뀜) ===== */
+:root {
+  --bg: #0f172a;        /* 배경 */
+  --panel: #1e293b;     /* 카드 배경 */
+  --text: #e2e8f0;      /* 기본 글자 */
+  --muted: #94a3b8;     /* 흐린 글자 */
+  --cyan: #22d3ee;      /* 포인트 색 1 */
+  --yellow: #facc15;    /* 포인트 색 2 */
+  --green: #4ade80;
+  --red: #f87171;
+}
+
+/* ===== 기본 설정 ===== */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Pretendard", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+  line-height: 1.6;
+}
+
+main { max-width: 960px; margin: 0 auto; padding: 0 16px; }
+section { padding: 48px 0; border-top: 1px solid var(--panel); }
+h2 { color: var(--cyan); }
+a { color: var(--cyan); }
+code { color: var(--yellow); }
+
+/* ===== 첫 화면 ===== */
+.hero { text-align: center; padding: 80px 16px 56px; }
+.hero h1 { font-size: 2.6rem; margin: 8px 0; }
+.tag { color: var(--cyan); font-weight: bold; }
+.subtitle { color: var(--muted); }
+
+.command {
+  display: flex; gap: 8px; align-items: center;
+  max-width: 720px; margin: 24px auto;
+  background: #020617; border: 1px solid var(--panel);
+  border-radius: 8px; padding: 12px;
+}
+.command code { flex: 1; text-align: left; overflow-x: auto; white-space: nowrap; font-size: 0.9rem; }
+
+button, .button {
+  cursor: pointer; border: 1px solid var(--cyan); background: transparent;
+  color: var(--cyan); padding: 8px 16px; border-radius: 8px;
+  font-size: 1rem; text-decoration: none; display: inline-block;
+}
+button:hover, .button:hover { background: var(--cyan); color: var(--bg); }
+.button.primary { background: var(--cyan); color: var(--bg); font-weight: bold; }
+.buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+/* ===== 카드 ===== */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.card { background: var(--panel); border-radius: 12px; padding: 20px; }
+.card h3 { margin-top: 0; color: var(--yellow); }
+.card p { color: var(--muted); margin-bottom: 0; }
+
+/* ===== 실행 화면 갤러리 ===== */
+.gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.gallery figure { margin: 0; background: var(--panel); border-radius: 12px; padding: 8px; }
+.gallery img { width: 100%; border-radius: 8px; display: block; }
+.gallery figcaption { text-align: center; color: var(--muted); padding-top: 6px; }
+
+/* ===== 웹에서 맛보기 ===== */
+.note { color: var(--muted); }
+.quiz-box { background: #020617; border: 1px solid var(--panel); border-radius: 12px; padding: 24px; }
+.progress { color: var(--cyan); font-family: monospace; }
+.question { font-size: 1.2rem; font-weight: bold; }
+.choices { display: grid; gap: 8px; margin: 16px 0; }
+.choices button { text-align: left; color: var(--text); border-color: var(--muted); }
+.message { min-height: 1.6em; font-weight: bold; }
+.correct { color: var(--green); }
+.wrong { color: var(--red); }
+.hint { color: var(--cyan); }
+
+/* ===== 개발 과정 ===== */
+.timeline { padding-left: 20px; }
+.timeline li { margin-bottom: 8px; }
+.timeline b { color: var(--yellow); margin-right: 8px; }
+
+footer { text-align: center; color: var(--muted); padding: 32px 16px; border-top: 1px solid var(--panel); }
+
+/* ===== 휴대폰 화면 ===== */
+@media (max-width: 600px) {
+  .hero h1 { font-size: 1.9rem; }
+  .command { flex-direction: column; }
+  .command code { width: 100%; }
+}

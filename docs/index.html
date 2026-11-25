@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python & Git 퀴즈 게임</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- 1. 첫 화면 -->
+  <header class="hero">
+    <p class="tag">Python 콘솔 프로젝트</p>
+    <h1>🎯 Python & Git<br>기초 상식 퀴즈</h1>
+    <p class="subtitle">터미널에서 동작하는 4지선다 퀴즈 게임입니다.<br>
+      퀴즈와 점수는 state.json에 저장되어 다시 실행해도 유지됩니다.</p>
+
+    <div class="command">
+      <code id="run-command">git clone https://github.com/bomigrace-byte/quiz-game.git && cd quiz-game && python main.py</code>
+      <button id="copy-button">복사</button>
+    </div>
+
+    <div class="buttons">
+      <a class="button primary" href="#try">웹에서 맛보기</a>
+      <a class="button" href="https://github.com/bomigrace-byte/quiz-game">GitHub 보기</a>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- 2. 기능 소개 -->
+    <section>
+      <h2>주요 기능</h2>
+      <div class="cards">
+        <div class="card"><h3>📝 퀴즈 풀기</h3><p>문제 수를 골라 무작위 순서로 풀고 100점 만점으로 채점합니다.</p></div>
+        <div class="card"><h3>➕ 퀴즈 추가</h3><p>문제, 선택지 4개, 정답, 힌트를 입력해 나만의 문제를 만듭니다.</p></div>
+        <div class="card"><h3>📋 퀴즈 목록</h3><p>등록된 문제를 확인합니다. 힌트가 있는 문제는 💡로 표시됩니다.</p></div>
+        <div class="card"><h3>🏆 점수 확인</h3><p>최고 점수와 최근 5회 게임 기록을 보여줍니다.</p></div>
+        <div class="card"><h3>🗑️ 퀴즈 삭제</h3><p>번호를 골라 삭제하고, 확인 단계에서 취소할 수 있습니다.</p></div>
+        <div class="card"><h3>🛟 백업과 복구</h3><p>저장 전에 자동 백업하고, 파일이 손상되면 원하는 백업으로 복원합니다.</p></div>
+      </div>
+    </section>
+
+    <!-- 3. 실행 화면 -->
+    <section>
+      <h2>실행 화면</h2>
+      <div class="gallery">
+        <figure><img src="screenshots/menu.png" alt="메뉴 화면"><figcaption>메뉴</figcaption></figure>
+        <figure><img src="screenshots/play.png" alt="퀴즈 풀기 화면"><figcaption>퀴즈 풀기</figcaption></figure>
+        <figure><img src="screenshots/add_quiz_01.png" alt="퀴즈 추가 화면"><figcaption>퀴즈 추가</figcaption></figure>
+        <figure><img src="screenshots/quiz_list.png" alt="퀴즈 목록 화면"><figcaption>퀴즈 목록</figcaption></figure>
+        <figure><img src="screenshots/score.png" alt="점수 확인 화면"><figcaption>점수 확인</figcaption></figure>
+        <figure><img src="screenshots/type_error.png" alt="잘못된 입력 처리 화면"><figcaption>잘못된 입력 처리</figcaption></figure>
+      </div>
+    </section>
+
+    <!-- 4. 웹에서 맛보기 -->
+    <section id="try">
+      <h2>웹에서 맛보기</h2>
+      <p class="note">실제 게임은 Python으로 동작합니다. 이 화면은 기본 퀴즈 7문제를 브라우저에서 체험해 보는 소개용 버전입니다.</p>
+      <div id="quiz-box" class="quiz-box"></div>
+    </section>
+
+    <!-- 5. 구조 -->
+    <section>
+      <h2>코드 구조</h2>
+      <div class="cards">
+        <div class="card"><h3>Quiz</h3><p><code>quiz.py</code><br>문제 1개: 출력, 정답 확인, 저장 형식 변환</p></div>
+        <div class="card"><h3>QuizGame</h3><p><code>quiz_game.py</code><br>게임 전체: 메뉴, 입력 검증, 점수, 저장/불러오기</p></div>
+        <div class="card"><h3>BackupManager</h3><p><code>backup.py</code><br>백업 생성, 백업 목록, 복구 로그</p></div>
+      </div>
+    </section>
+
+    <!-- 6. 개발 과정 -->
+    <section>
+      <h2>개발 과정</h2>
+      <p>기능마다 브랜치를 만들어 작업하고 <code>main</code>에 병합했습니다.</p>
+      <ol class="timeline">
+        <li><b>feature/play</b> 퀴즈 풀기</li>
+        <li><b>feature/random</b> 랜덤 출제</li>
+        <li><b>feature/count</b> 문제 수 선택</li>
+        <li><b>feature/hint</b> 힌트와 점수 차감</li>
+        <li><b>feature/delete</b> 퀴즈 삭제</li>
+        <li><b>feature/history</b> 게임 기록</li>
+        <li><b>feature/ui</b> 색상과 진행률</li>
+        <li><b>feature/backup</b> 백업과 복구</li>
+      </ol>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>Python 3.10+ · 외부 라이브러리 없음 · <a href="https://github.com/bomigrace-byte/quiz-game">GitHub 저장소</a></p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
