@@ -29,18 +29,9 @@
 
 <h3 align="center">✨ 한눈에 보기</h3>
 
-<table align="center">
-  <tr>
-    <td align="center"><h3>📝</h3><b>퀴즈 풀기</b><br><sub>문제 수 선택, 무작위 출제<br>100점 만점 채점</sub></td>
-    <td align="center"><h3>➕</h3><b>퀴즈 추가</b><br><sub>문제, 선택지 4개<br>정답, 힌트 입력</sub></td>
-    <td align="center"><h3>📋</h3><b>퀴즈 목록</b><br><sub>등록된 문제 확인<br>힌트 있는 문제는 💡</sub></td>
-  </tr>
-  <tr>
-    <td align="center"><h3>🏆</h3><b>점수 확인</b><br><sub>최고 점수와<br>최근 5회 기록</sub></td>
-    <td align="center"><h3>🗑️</h3><b>퀴즈 삭제</b><br><sub>번호 선택 후 확인<br>0 또는 n으로 취소</sub></td>
-    <td align="center"><h3>🛟</h3><b>백업과 복구</b><br><sub>저장 전 자동 백업<br>손상 시 선택 복원</sub></td>
-  </tr>
-</table>
+<p align="center">
+  <img src="docs/features.png" alt="퀴즈 풀기, 퀴즈 추가, 퀴즈 목록, 점수 확인, 퀴즈 삭제, 백업과 복구" width="100%">
+</p>
 
 <h3 align="center">🚀 빠른 시작</h3>
 
@@ -52,43 +43,23 @@ python main.py
 
 <h3 align="center">📚 목차</h3>
 
-<table align="center">
-  <tr>
-    <th>📖 프로젝트 설명</th>
-    <th>🧠 학습 노트</th>
-    <th>🛠️ 개발 기록</th>
-  </tr>
-  <tr>
-    <td valign="top">
-      1. <a href="#1-프로젝트-개요">프로젝트 개요</a><br>
-      2. <a href="#2-퀴즈-주제-및-선정-이유">주제 및 선정 이유</a><br>
-      3. <a href="#3-실행-방법">실행 방법</a><br>
-      4. <a href="#4-기능-목록">기능 목록</a><br>
-      5. <a href="#5-파일-구조">파일 구조</a><br>
-      6. <a href="#6-프로그램-실행-흐름">실행 흐름</a><br>
-      7. <a href="#7-데이터-파일-설명-statejson">데이터 파일 (state.json)</a><br>
-      &nbsp;&nbsp;&nbsp;· <a href="#데이터-백업과-복구">백업과 복구</a><br>
-      8. <a href="#8-실행-화면">실행 화면</a>
-    </td>
-    <td valign="top">
-      🎯 <a href="#학습-목표-달성-현황"><b>학습 목표 달성 현황</b></a><br>
-      9. <a href="#9-개념-학습-가이드">개념 학습 가이드</a><br>
-      &nbsp;&nbsp;&nbsp;· <a href="#9-1-python-기초">Python 기초</a><br>
-      &nbsp;&nbsp;&nbsp;· <a href="#9-2-클래스와-객체">클래스와 객체</a><br>
-      &nbsp;&nbsp;&nbsp;· <a href="#9-3-파일-입출력과-예외-처리">파일 입출력과 예외</a><br>
-      &nbsp;&nbsp;&nbsp;· <a href="#9-4-보너스-기능에-쓰인-개념">보너스 기능 개념</a><br>
-      &nbsp;&nbsp;&nbsp;· <a href="#9-5-git-기초">Git 기초</a><br>
-      10. <a href="#10-동료-평가-코드-설명-포인트">동료 평가 설명 포인트</a><br>
-      15. <a href="#15-과제-목표-셀프-체크리스트">셀프 체크리스트</a>
-    </td>
-    <td valign="top">
-      11. <a href="#11-git-작업-기록">Git 작업 기록</a><br>
-      12. <a href="#12-커밋-규칙">커밋 규칙</a><br>
-      13. <a href="#13-대량-데이터-처리-분석-퀴즈-1000개-이상">대량 데이터 분석</a><br>
-      14. <a href="#14-요구사항-변경-시-수정-위치">요구사항 변경 시 수정 위치</a>
-    </td>
-  </tr>
-</table>
+<p align="center">
+  <b>📖 프로젝트 설명</b><br>
+  <a href="#1-프로젝트-개요">프로젝트 개요</a> · <a href="#2-퀴즈-주제-및-선정-이유">주제 선정 이유</a> · <a href="#3-실행-방법">실행 방법</a> · <a href="#4-기능-목록">기능 목록</a> · <a href="#5-파일-구조">파일 구조</a><br>
+  <a href="#6-프로그램-실행-흐름">실행 흐름</a> · <a href="#7-데이터-파일-설명-statejson">데이터 파일</a> · <a href="#데이터-백업과-복구">백업과 복구</a> · <a href="#8-실행-화면">실행 화면</a>
+</p>
+
+<p align="center">
+  <b>🧠 학습 노트</b><br>
+  <a href="#학습-목표-달성-현황"><b>🎯 학습 목표 달성 현황</b></a><br>
+  <a href="#9-1-python-기초">Python 기초</a> · <a href="#9-2-클래스와-객체">클래스와 객체</a> · <a href="#9-3-파일-입출력과-예외-처리">파일 입출력과 예외</a> · <a href="#9-4-보너스-기능에-쓰인-개념">보너스 기능 개념</a> · <a href="#9-5-git-기초">Git 기초</a><br>
+  <a href="#10-동료-평가-코드-설명-포인트">동료 평가 설명 포인트</a> · <a href="#15-과제-목표-셀프-체크리스트">셀프 체크리스트</a>
+</p>
+
+<p align="center">
+  <b>🛠️ 개발 기록</b><br>
+  <a href="#11-git-작업-기록">Git 작업 기록</a> · <a href="#12-커밋-규칙">커밋 규칙</a> · <a href="#13-대량-데이터-처리-분석-퀴즈-1000개-이상">대량 데이터 분석</a> · <a href="#14-요구사항-변경-시-수정-위치">요구사항 변경 시 수정 위치</a>
+</p>
 
 ---
 
@@ -979,6 +950,7 @@ pull은 `fetch`(원격 저장소의 새 기록을 내려받기)와 `merge`(내 �
 | `feature/readme-design` | README 배너와 카드 레이아웃 |
 | `feature/learning-goals` | 학습 목표 달성 현황 정리 |
 | `feature/readme-layout` | README 표 정렬, 줄바꿈, 실행 흐름도 개선 |
+| `feature/readme-toc` | 목차와 기능 카드를 가운데 정렬 레이아웃으로 변경 |
 
 ### `git log --oneline --graph` 출력
 
