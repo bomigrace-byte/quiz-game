@@ -29,11 +29,11 @@
 
 <h3 align="center">✨ 한눈에 보기</h3>
 
-<table>
+<table align="center">
   <tr>
-    <td align="center" width="33%"><h3>📝</h3><b>퀴즈 풀기</b><br><sub>문제 수 선택, 무작위 출제<br>100점 만점 채점</sub></td>
-    <td align="center" width="33%"><h3>➕</h3><b>퀴즈 추가</b><br><sub>문제, 선택지 4개<br>정답, 힌트 입력</sub></td>
-    <td align="center" width="33%"><h3>📋</h3><b>퀴즈 목록</b><br><sub>등록된 문제 확인<br>힌트 있는 문제는 💡</sub></td>
+    <td align="center"><h3>📝</h3><b>퀴즈 풀기</b><br><sub>문제 수 선택, 무작위 출제<br>100점 만점 채점</sub></td>
+    <td align="center"><h3>➕</h3><b>퀴즈 추가</b><br><sub>문제, 선택지 4개<br>정답, 힌트 입력</sub></td>
+    <td align="center"><h3>📋</h3><b>퀴즈 목록</b><br><sub>등록된 문제 확인<br>힌트 있는 문제는 💡</sub></td>
   </tr>
   <tr>
     <td align="center"><h3>🏆</h3><b>점수 확인</b><br><sub>최고 점수와<br>최근 5회 기록</sub></td>
@@ -52,11 +52,11 @@ python main.py
 
 <h3 align="center">📚 목차</h3>
 
-<table>
+<table align="center">
   <tr>
-    <th width="33%">📖 프로젝트 설명</th>
-    <th width="33%">🧠 학습 노트</th>
-    <th width="33%">🛠️ 개발 기록</th>
+    <th>📖 프로젝트 설명</th>
+    <th>🧠 학습 노트</th>
+    <th>🛠️ 개발 기록</th>
   </tr>
   <tr>
     <td valign="top">
@@ -96,43 +96,39 @@ python main.py
 ## 학습 목표 달성 현황
 
 미션 가이드의 **학습 목표 15개**를 이 프로젝트의 어디에서 구현했는지 정리했습니다.
-평가할 때는 표의 **시연 방법**대로 실행해 보고, **설명** 링크에서 개념과 예상 질문을 확인할 수 있습니다.
+평가할 때는 표의 **시연 방법**대로 실행해 보고, **학습 목표**를 누르면 개념 설명과 예상 질문으로 이동합니다.
 
 ### 🐍 Python 기초
 
-| # | 학습 목표 | 구현한 곳 | 시연 방법 | 설명 |
-|:-:|---|---|---|:-:|
-| 1 | 변수의 의미와 사용 이유 | `play()`의 `correct`, `earned` | 퀴즈를 풀고 결과 점수 확인 | [보기](#변수) |
-| 2 | `int`, `str`, `bool`, `list`, `dict`의 차이 | `Quiz.__init__()`, `add_history()` | `state.json` 열어 보기 | [보기](#자료형-int-str-bool-list-dict) |
-| 3 | `if/elif/else` 조건 분기 | `run()`의 메뉴 분기 | 메뉴 1~6 선택 | [보기](#조건문-if--elif--else) |
-| 4 | `for`와 `while`의 차이와 선택 | `play()`의 `for`, `get_number()`의 `while` | 문제 수만큼 출제 / 잘못된 입력 반복 | [보기](#반복문-for-vs-while) |
-| 5 | 함수, 매개변수, 반환값 | `get_number(prompt, min_value, max_value)` | 메뉴·정답·삭제에서 범위만 바꿔 재사용 | [보기](#함수-정의-매개변수-반환값) |
-
+| # | 학습 목표 | 구현한 곳 | 시연 방법 |
+|:-:|---|---|---|
+| 1 | [변수의 의미와<br>사용 이유](#변수) | `play()`의<br>`correct`, `earned` | 퀴즈를 풀고<br>결과 점수 확인 |
+| 2 | [`int` `str` `bool`<br>`list` `dict`의 차이](#자료형-int-str-bool-list-dict) | `Quiz.__init__()`<br>`add_history()` | `state.json`<br>열어 보기 |
+| 3 | [`if/elif/else`<br>조건 분기](#조건문-if--elif--else) | `run()`의<br>메뉴 분기 | 메뉴 1~6<br>선택 |
+| 4 | [`for`와 `while`의<br>차이](#반복문-for-vs-while) | `play()`의 for<br>`get_number()`의 while | 정해진 문제 수만큼 출제<br>잘못된 입력은 다시 묻기 |
+| 5 | [함수, 매개변수,<br>반환값](#함수-정의-매개변수-반환값) | `get_number()` | 메뉴·정답·삭제에서<br>재사용 |
 ### 🧱 클래스와 객체
 
-| # | 학습 목표 | 구현한 곳 | 시연 방법 | 설명 |
-|:-:|---|---|---|:-:|
-| 6 | 클래스의 의미와 사용 이유 | `Quiz`, `QuizGame`, `BackupManager` | 파일 3개로 역할 분리 | [보기](#클래스란) |
-| 7 | `__init__`과 `self`의 역할 | `Quiz.__init__()`, `is_correct()` | 문제마다 다른 정답으로 채점 | [보기](#__init__과-self) |
-| 8 | 속성과 메서드 정의·활용 | `quiz.answer` / `quiz.is_correct()` | 퀴즈 목록, 퀴즈 풀기 | [보기](#속성attribute과-메서드method) |
-
+| # | 학습 목표 | 구현한 곳 | 시연 방법 |
+|:-:|---|---|---|
+| 6 | [클래스의 의미와<br>사용 이유](#클래스란) | `Quiz`, `QuizGame`<br>`BackupManager` | 파일 3개로<br>역할 분리 |
+| 7 | [`__init__`과 `self`의<br>역할](#__init__과-self) | `Quiz.__init__()`<br>`is_correct()` | 문제마다 다른<br>정답으로 채점 |
+| 8 | [속성과<br>메서드](#속성attribute과-메서드method) | `quiz.answer`<br>`quiz.is_correct()` | 퀴즈 목록<br>퀴즈 풀기 |
 ### 💾 파일 입출력
 
-| # | 학습 목표 | 구현한 곳 | 시연 방법 | 설명 |
-|:-:|---|---|---|:-:|
-| 9 | 파일 열기·읽기·쓰기 | `load()`, `save()`의 `with open` | 종료 후 다시 실행 → 데이터 유지 | [보기](#파일-열기--읽기--쓰기) |
-| 10 | JSON의 의미와 사용 이유 | `json.load()` / `json.dump()`, `to_dict()` / `from_dict()` | `state.json` 열어 보기 | [보기](#json) |
-| 11 | `try/except` 오류 처리 | `get_number()`, `load()`, `main()` | `abc` 입력, 파일 손상, `Ctrl+C` | [보기](#try--except) |
-
+| # | 학습 목표 | 구현한 곳 | 시연 방법 |
+|:-:|---|---|---|
+| 9 | [파일 열기·<br>읽기·쓰기](#파일-열기--읽기--쓰기) | `load()`, `save()`의<br>`with open` | 종료 후 다시 실행해도<br>데이터 유지 |
+| 10 | [JSON의 의미와<br>사용 이유](#json) | `json.load()`<br>`json.dump()` | `state.json`<br>열어 보기 |
+| 11 | [`try/except`<br>오류 처리](#try--except) | `get_number()`<br>`load()`, `main()` | `abc` 입력<br>파일 손상, `Ctrl+C` |
 ### 🌿 Git 기초
 
-| # | 학습 목표 | 구현한 곳 | 시연 방법 | 설명 |
-|:-:|---|---|---|:-:|
-| 12 | Git의 의미와 필요성 | 기능 단위 커밋 이력 | `git log --oneline` | [보기](#git이란-왜-필요한가) |
-| 13 | `init`·`add`·`commit`·`push`·`pull`·`checkout`·`clone` | [Git 작업 기록](#11-git-작업-기록) | `git log --oneline --graph` | [보기](#명령어-7종) |
-| 14 | 브랜치 생성과 병합 | `feature/` 브랜치 → `merge --no-ff` | 그래프의 갈라졌다 합쳐진 선 | [보기](#브랜치와-병합) |
-| 15 | `clone`과 `pull`로 변경사항 가져오기 | clone 저장소에서 수정 → 원래 폴더에서 pull | [clone/pull 실습 기록](#clone--pull-실습) | [보기](#clone과-pull의-차이) |
-
+| # | 학습 목표 | 구현한 곳 | 시연 방법 |
+|:-:|---|---|---|
+| 12 | [Git의 의미와<br>필요성](#git이란-왜-필요한가) | 기능 단위<br>커밋 이력 | `git log`<br>`--oneline` |
+| 13 | [Git 명령어<br>7종](#명령어-7종) | [Git 작업 기록](#11-git-작업-기록) | `git log`<br>`--oneline --graph` |
+| 14 | [브랜치 생성과<br>병합](#브랜치와-병합) | `feature/` 브랜치<br>→ `merge --no-ff` | 그래프의 갈라졌다<br>합쳐진 선 |
+| 15 | [`clone`과<br>`pull`](#clone과-pull의-차이) | clone 폴더에서 수정<br>→ 원래 폴더에서 pull | [clone/pull<br>실습 기록](#clone--pull-실습) |
 > 15개 항목을 스스로 점검하려면 [과제 목표 셀프 체크리스트](#15-과제-목표-셀프-체크리스트)를 사용하세요.
 
 ---
@@ -241,34 +237,26 @@ quiz-game/
 
 ## 6. 프로그램 실행 흐름
 
+```mermaid
+flowchart TD
+    A["python main.py"] --> B["main()<br>try 시작"]
+    B --> C["QuizGame() 생성<br>__init__() → load()"]
+    C --> D{"state.json 상태"}
+    D -- 손상 --> G["복구 절차<br>손상 파일 보관 → 백업/초기화 선택<br>→ 저장 → 로그 기록"]
+    D -- 없음 --> F["기본 퀴즈 7개로 시작"]
+    D -- 있음 --> E["저장된 데이터 불러오기"]
+    E --> H
+    F --> H
+    G --> H
+    H["run()<br>while True 메뉴 반복"] --> I{"get_number()로<br>메뉴 선택"}
+    I -- 1~5 --> M["메뉴 기능 실행<br>1 play() · 2 add_quiz() · 3 list_quizzes()<br>4 show_score() · 5 delete_quiz()"]
+    M -- 끝나면 다시 메뉴로 --> H
+    I -- 6 --> U["save() → break<br>종료"]
+    H -. Ctrl+C 또는 EOF .-> V["except → save()<br>안전하게 종료"]
 ```
-python main.py
-   │
-   ▼
-main()  ── try ──────────────────────────────────────────┐
-   │                                                      │
-   ▼                                                      │
-QuizGame()  →  __init__()  →  load()                      │
-   │             state.json 있음  → 불러오기               │
-   │             state.json 없음  → 기본 퀴즈             │
-   │             state.json 손상  → 복구 절차             │
-   │               (손상 파일 보관 → 백업/초기화 선택      │
-   │                → 저장 → 로그 기록)                   │
-   ▼                                                      │
-run()  ── while True 반복 ──┐                             │
-   │   show_menu()          │                             │
-   │   get_number() 로 선택  │                             │
-   │   1 → play()           │                             │
-   │   2 → add_quiz()       │  각 기능이 끝나면             │
-   │   3 → list_quizzes()   │  다시 메뉴로                 │
-   │   4 → show_score()     │                             │
-   │   5 → delete_quiz()  ──┘                             │
-   │   6 → save() 후 break → 종료                          │
-   │                                                      │
-   └─ Ctrl+C / EOF 발생 → except → save() 후 안전하게 종료 ─┘
 
-※ save()는 state.json을 덮어쓰기 직전에 항상 백업을 먼저 만듭니다.
-```
+- 1~5번 기능이 끝나면 다시 메뉴(`run()`)로 돌아갑니다.
+- `save()`는 `state.json`을 덮어쓰기 직전에 항상 백업을 먼저 만듭니다.
 
 ## 7. 데이터 파일 설명 (`state.json`)
 
@@ -497,8 +485,8 @@ else:              # 1~5가 아니면 (= 6, 종료)
 
 | | for | while |
 |---|---|---|
-| 언제 | **반복 횟수가 정해져 있을 때** | **조건이 만족될 때까지** (횟수를 모를 때) |
-| 이 프로젝트 | 선택한 문제 수만큼 출제 (`play()`) | 메뉴 반복 (`run()`), 올바른 입력이 들어올 때까지 (`get_number()`) |
+| 언제 | **반복 횟수가<br>정해져 있을 때** | **조건이 만족될 때까지**<br>(횟수를 모를 때) |
+| 사용한 곳 | 선택한 문제 수만큼 출제<br>(`play()`) | 메뉴 반복 (`run()`)<br>올바른 입력이 들어올 때까지<br>(`get_number()`) |
 
 ```python
 # for: 선택한 문제들을 하나씩 꺼냄 (횟수 = 문제 수)
@@ -990,6 +978,7 @@ pull은 `fetch`(원격 저장소의 새 기록을 내려받기)와 `merge`(내 �
 | `feature/landing` | 프로젝트 소개 웹페이지 (GitHub Pages) |
 | `feature/readme-design` | README 배너와 카드 레이아웃 |
 | `feature/learning-goals` | 학습 목표 달성 현황 정리 |
+| `feature/readme-layout` | README 표 정렬, 줄바꿈, 실행 흐름도 개선 |
 
 ### `git log --oneline --graph` 출력
 
