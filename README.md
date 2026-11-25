@@ -7,6 +7,7 @@
   <a href="#학습-목표-달성-현황"><img src="https://img.shields.io/badge/%ED%95%99%EC%8A%B5_%EB%AA%A9%ED%91%9C-15%EA%B0%9C-f472b6?style=for-the-badge" alt="학습 목표"></a>
   <a href="#3-실행-방법"><img src="https://img.shields.io/badge/%EC%8B%A4%ED%96%89_%EB%B0%A9%EB%B2%95-%EB%B3%B4%EA%B8%B0-facc15?style=for-the-badge" alt="실행 방법"></a>
   <a href="#9-개념-학습-가이드"><img src="https://img.shields.io/badge/%ED%95%99%EC%8A%B5_%EB%85%B8%ED%8A%B8-%EB%B3%B4%EA%B8%B0-4ade80?style=for-the-badge" alt="학습 노트"></a>
+  <a href="#학습-목표-슬라이드"><img src="https://img.shields.io/badge/%EC%8A%AC%EB%9D%BC%EC%9D%B4%EB%93%9C-11%EC%9E%A5-a78bfa?style=for-the-badge" alt="학습 목표 슬라이드"></a>
 </p>
 
 <p align="center">
@@ -51,7 +52,7 @@ python main.py
 
 <p align="center">
   <b>🧠 학습 노트</b><br>
-  <a href="#학습-목표-달성-현황"><b>🎯 학습 목표 달성 현황</b></a> · <a href="#기본-개념-정리"><b>📘 기본 개념 정리</b></a><br>
+  <a href="#학습-목표-슬라이드"><b>🎞️ 학습 목표 슬라이드</b></a> · <a href="#학습-목표-달성-현황"><b>🎯 학습 목표 달성 현황</b></a> · <a href="#기본-개념-정리"><b>📘 기본 개념 정리</b></a><br>
   <a href="#9-1-python-기초">Python 기초</a> · <a href="#9-2-클래스와-객체">클래스와 객체</a> · <a href="#9-3-파일-입출력과-예외-처리">파일 입출력과 예외</a> · <a href="#9-4-보너스-기능에-쓰인-개념">보너스 기능 개념</a> · <a href="#9-5-git-기초">Git 기초</a><br>
   <a href="#10-동료-평가-코드-설명-포인트">동료 평가 설명 포인트</a> · <a href="#15-과제-목표-셀프-체크리스트">셀프 체크리스트</a>
 </p>
@@ -63,6 +64,25 @@ python main.py
 
 ---
 
+
+## 학습 목표 슬라이드
+
+동료에게 학습 목표를 설명할 때 쓰려고 **15개 목표를 슬라이드 11장**으로 정리했습니다. 영역마다 색을 정해 두었습니다. (🐍 Python 파랑 · 🧱 클래스 청록 · 💾 파일 주황 · 🌿 Git 보라)<br>
+[소개 페이지](https://bomigrace-byte.github.io/quiz-game/#slides)에서는 한 장씩 넘겨 볼 수 있습니다.
+
+<p align="center">
+  <img src="docs/slides/01-cover.png" alt="퀴즈 게임 하나로 4가지 기초를 익힌다" width="100%">
+</p>
+
+| | |
+|---|---|
+| <img src="docs/slides/02-map.png" alt="학습목표 지도: 4개 영역, 15개 목표" width="100%"><br><sub>학습목표 지도: 4개 영역, 15개 목표</sub> | <img src="docs/slides/03-variable.png" alt="목표 1. 변수는 값에 붙이는 이름표" width="100%"><br><sub>목표 1. 변수는 값에 붙이는 이름표</sub> |
+| <img src="docs/slides/04-types.png" alt="목표 2. 자료형 5가지의 차이" width="100%"><br><sub>목표 2. 자료형 5가지의 차이</sub> | <img src="docs/slides/05-flow.png" alt="목표 3–5. 조건, 반복, 함수" width="100%"><br><sub>목표 3–5. 조건, 반복, 함수</sub> |
+| <img src="docs/slides/06-klass.png" alt="목표 6–8. 클래스와 객체" width="100%"><br><sub>목표 6–8. 클래스와 객체</sub> | <img src="docs/slides/07-fileio.png" alt="목표 9–11. 파일 입출력과 state.json" width="100%"><br><sub>목표 9–11. 파일 입출력과 state.json</sub> |
+| <img src="docs/slides/08-git.png" alt="목표 12–13. Git 기본 흐름과 명령어 7종" width="100%"><br><sub>목표 12–13. Git 기본 흐름과 명령어 7종</sub> | <img src="docs/slides/09-branch.png" alt="목표 14–15. 브랜치, clone과 pull" width="100%"><br><sub>목표 14–15. 브랜치, clone과 pull</sub> |
+| <img src="docs/slides/10-mission.png" alt="정리: 목표는 미션 어디에서 확인되나" width="100%"><br><sub>정리: 목표는 미션 어디에서 확인되나</sub> | <img src="docs/slides/11-check.png" alt="셀프 체크: 15개 질문" width="100%"><br><sub>셀프 체크: 15개 질문</sub> |
+
+---
 
 ## 학습 목표 달성 현황
 
@@ -1426,6 +1446,7 @@ pull은 `fetch`(원격 저장소의 새 기록을 내려받기)와 `merge`(내 �
 | `feature/readme-toc` | 목차와 기능 카드를 가운데 정렬 레이아웃으로 변경 |
 | `feature/basic-concepts` | 학습 목표의 기본 개념 정리 (README, 랜딩 페이지) |
 | `feature/goals-list` | 학습 목표 현황을 표에서 항목 목록으로 변경 |
+| `feature/learning-slides` | 학습 목표 슬라이드 11장 추가 (README, 랜딩 페이지) |
 
 ### `git log --oneline --graph` 출력
 

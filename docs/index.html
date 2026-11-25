@@ -23,6 +23,7 @@
     <div class="buttons">
       <a class="button primary" href="#try">웹에서 맛보기</a>
       <a class="button" href="#goals">학습 목표 보기</a>
+      <a class="button" href="#slides">슬라이드로 보기</a>
       <a class="button" href="https://github.com/bomigrace-byte/quiz-game">GitHub 보기</a>
     </div>
   </header>
@@ -172,6 +173,34 @@
       <p class="more"><a href="https://github.com/bomigrace-byte/quiz-game#학습-목표-달성-현황">README에서 코드 예시와 예상 질문까지 보기 →</a></p>
     </section>
 
+    <!-- 학습 목표 슬라이드 -->
+    <section id="slides">
+      <h2>학습 목표 슬라이드</h2>
+      <p class="note">15개 학습 목표를 동료에게 설명하려고 11장으로 정리했습니다. 버튼이나 키보드 ← → 로 넘겨 보세요.</p>
+
+      <div class="slider">
+        <img id="slide-image" src="slides/01-cover.png" alt="표지: 퀴즈 게임 하나로 4가지 기초를 익힌다">
+        <div class="slider-bar">
+          <button id="slide-prev" aria-label="이전 슬라이드">← 이전</button>
+          <p id="slide-caption"><span id="slide-count">1 / 11</span> 표지: 퀴즈 게임 하나로 4가지 기초를 익힌다</p>
+          <button id="slide-next" aria-label="다음 슬라이드">다음 →</button>
+        </div>
+        <div class="thumbs">
+          <button class="thumb" data-index="0" aria-label="1번 슬라이드: 표지: 퀴즈 게임 하나로 4가지 기초를 익힌다"><img src="slides/01-cover.png" alt="" loading="lazy"></button>
+          <button class="thumb" data-index="1" aria-label="2번 슬라이드: 학습목표 지도: 4개 영역, 15개 목표"><img src="slides/02-map.png" alt="" loading="lazy"></button>
+          <button class="thumb" data-index="2" aria-label="3번 슬라이드: 목표 1. 변수는 값에 붙이는 이름표"><img src="slides/03-variable.png" alt="" loading="lazy"></button>
+          <button class="thumb" data-index="3" aria-label="4번 슬라이드: 목표 2. 자료형 5가지의 차이"><img src="slides/04-types.png" alt="" loading="lazy"></button>
+          <button class="thumb" data-index="4" aria-label="5번 슬라이드: 목표 3–5. 조건, 반복, 함수"><img src="slides/05-flow.png" alt="" loading="lazy"></button>
+          <button class="thumb" data-index="5" aria-label="6번 슬라이드: 목표 6–8. 클래스와 객체"><img src="slides/06-klass.png" alt="" loading="lazy"></button>
+          <button class="thumb" data-index="6" aria-label="7번 슬라이드: 목표 9–11. 파일 입출력과 state.json"><img src="slides/07-fileio.png" alt="" loading="lazy"></button>
+          <button class="thumb" data-index="7" aria-label="8번 슬라이드: 목표 12–13. Git 기본 흐름과 명령어 7종"><img src="slides/08-git.png" alt="" loading="lazy"></button>
+          <button class="thumb" data-index="8" aria-label="9번 슬라이드: 목표 14–15. 브랜치, clone과 pull"><img src="slides/09-branch.png" alt="" loading="lazy"></button>
+          <button class="thumb" data-index="9" aria-label="10번 슬라이드: 정리: 목표는 미션 어디에서 확인되나"><img src="slides/10-mission.png" alt="" loading="lazy"></button>
+          <button class="thumb" data-index="10" aria-label="11번 슬라이드: 셀프 체크: 15개 질문"><img src="slides/11-check.png" alt="" loading="lazy"></button>
+        </div>
+      </div>
+    </section>
+
     <!-- 3. 실행 화면 -->
     <section>
       <h2>실행 화면</h2>
@@ -219,6 +248,7 @@
         <li><b>feature/readme-design</b> README 배너와 레이아웃</li>
         <li><b>feature/learning-goals</b> 학습 목표 달성 현황</li>
         <li><b>feature/basic-concepts</b> 학습 목표 기본 개념 정리</li>
+        <li><b>feature/learning-slides</b> 학습 목표 슬라이드</li>
       </ol>
     </section>
 
